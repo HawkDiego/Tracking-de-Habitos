@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "tracking_habitos/1.0.0": {
+        "runtime": {
+          "tracking_habitos.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "tracking_habitos/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

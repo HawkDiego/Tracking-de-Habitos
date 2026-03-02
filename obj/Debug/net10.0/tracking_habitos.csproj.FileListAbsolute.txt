@@ -1,0 +1,15 @@
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/bin/Debug/net10.0/tracking_habitos
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/bin/Debug/net10.0/tracking_habitos.deps.json
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/bin/Debug/net10.0/tracking_habitos.runtimeconfig.json
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/bin/Debug/net10.0/tracking_habitos.dll
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/bin/Debug/net10.0/tracking_habitos.pdb
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.GeneratedMSBuildEditorConfig.editorconfig
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.AssemblyInfoInputs.cache
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.AssemblyInfo.cs
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.csproj.CoreCompileInputs.cache
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.sourcelink.json
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.dll
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/refint/tracking_habitos.dll
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.pdb
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/tracking_habitos.genruntimeconfig.cache
+/Users/diegogiraldo/Documents/desarrollo_software/tracking_habitos/obj/Debug/net10.0/ref/tracking_habitos.dll
