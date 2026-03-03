@@ -7,28 +7,94 @@ Console.WriteLine("Hello, World!");
 
 DatosDemo datosDemo = GeneradorDatosDemo.Crear();
 
-Console.WriteLine("Se generaron datos de prueba:");
-Console.WriteLine($"Usuarios: {datosDemo.Usuarios.Count}");
-Console.WriteLine($"Niveles: {datosDemo.Niveles.Count}");
-Console.WriteLine($"Configuraciones: {datosDemo.Configuraciones.Count}");
-Console.WriteLine($"Habitos: {datosDemo.Habitos.Count}");
-Console.WriteLine($"HabitosPlantilla: {datosDemo.HabitosPlantilla.Count}");
-Console.WriteLine($"Categorias: {datosDemo.Categorias.Count}");
-Console.WriteLine($"Frecuencias: {datosDemo.Frecuencias.Count}");
-Console.WriteLine($"RegistroProgresos: {datosDemo.RegistroProgresos.Count}");
-Console.WriteLine($"Notas: {datosDemo.Notas.Count}");
-Console.WriteLine($"Recordatorios: {datosDemo.Recordatorios.Count}");
-Console.WriteLine($"Rachas: {datosDemo.Rachas.Count}");
-Console.WriteLine($"Logros: {datosDemo.Logros.Count}");
-Console.WriteLine($"UsuariosLogros: {datosDemo.UsuariosLogros.Count}");
-Console.WriteLine($"Recompensas: {datosDemo.Recompensas.Count}");
-Console.WriteLine($"HistorialesDesbloqueo: {datosDemo.HistorialesDesbloqueo.Count}");
-Console.WriteLine($"EstadisticasUsuarios: {datosDemo.EstadisticasUsuarios.Count}");
-Console.WriteLine($"MetricasGlobales: {datosDemo.MetricasGlobales.Count}");
-Console.WriteLine($"Grupos: {datosDemo.Grupos.Count}");
-Console.WriteLine($"UsuariosGrupos: {datosDemo.UsuariosGrupos.Count}");
-Console.WriteLine($"Desafios: {datosDemo.Desafios.Count}");
-Console.WriteLine($"ParticipacionDesafios: {datosDemo.ParticipacionDesafios.Count}");
+LogDatosDemo(datosDemo);
+
+void LogDatosDemo(DatosDemo datos)
+{
+    Console.WriteLine("\n--- Usuarios ---");
+    foreach (var u in datos.Usuarios)
+        Console.WriteLine($"Id: {u.Id}, Nombre: {u.Nombre}, Email: {u.Email}, Nivel: {u.Nivel}, Configuracion: {u.Configuracion}");
+
+    Console.WriteLine("\n--- Niveles ---");
+    foreach (var n in datos.Niveles)
+        Console.WriteLine($"Id: {n.Id}, Nombre: {n.Nombre}, Usuarios: {n.Usuarios?.Count ?? 0}");
+
+    Console.WriteLine("\n--- Configuraciones ---");
+    foreach (var c in datos.Configuraciones)
+        Console.WriteLine($"Id: {c.Id}, Tema: {c.Tema}, Idioma: {c.Idioma}, Usuarios: {c.Usuarios?.Count ?? 0}");
+
+    Console.WriteLine("\n--- Habitos ---");
+    foreach (var h in datos.Habitos)
+        Console.WriteLine($"Id: {h.Id}, Nombre: {h.Nombre}, Usuario: {h.Usuario}, Categoria: {h.Categoria}, Frecuencia: {h.Frecuencia}");
+
+    Console.WriteLine("\n--- HabitosPlantilla ---");
+    foreach (var hp in datos.HabitosPlantilla)
+        Console.WriteLine($"Id: {hp.Id}, Nombre: {hp.Nombre}, Categoria: {hp.Categoria}, EsOficial: {hp.EsOficial}");
+
+    Console.WriteLine("\n--- Categorias ---");
+    foreach (var cat in datos.Categorias)
+        Console.WriteLine($"Id: {cat.Id}, Nombre: {cat.Nombre}, Color: {cat.Color}, Icono: {cat.Icono}");
+
+    Console.WriteLine("\n--- Frecuencias ---");
+    foreach (var f in datos.Frecuencias)
+        Console.WriteLine($"Id: {f.Id}, TipoIntervalo: {f.TipoIntervalo}, DiasSemana: {f.DiasSemana}, VecesPorDia: {f.VecesPorDia}");
+
+    Console.WriteLine("\n--- RegistroProgresos ---");
+    foreach (var rp in datos.RegistroProgresos)
+        Console.WriteLine($"Id: {rp.Id}, Habito: {rp.Habito}, FechaLogro: {rp.FechaLogro.ToShortDateString()}, Completado: {rp.Completado}, XpGanada: {rp.XpGanada}");
+
+    Console.WriteLine("\n--- Notas ---");
+    foreach (var n in datos.Notas)
+        Console.WriteLine($"Id: {n.Id}, Texto: {n.Texto}, RegistroProgreso: {n.RegistroProgreso}");
+
+    Console.WriteLine("\n--- Recordatorios ---");
+    foreach (var r in datos.Recordatorios)
+        Console.WriteLine($"Id: {r.Id}, Habito: {r.Habito}, HoraEjecucion: {r.HoraEjecucion}, Activo: {r.Activo}");
+
+    Console.WriteLine("\n--- Rachas ---");
+    foreach (var r in datos.Rachas)
+        Console.WriteLine($"Id: {r.Id}, Habito: {r.Habito}, ConteoActual: {r.ConteoActual}, MaximaHistorica: {r.MaximaHistorica}");
+
+    Console.WriteLine("\n--- Logros ---");
+    foreach (var l in datos.Logros)
+        Console.WriteLine($"Id: {l.Id}, Titulo: {l.Titulo}, XpOtorgada: {l.XpOtorgada}");
+
+    Console.WriteLine("\n--- UsuariosLogros ---");
+    foreach (var ul in datos.UsuariosLogros)
+        Console.WriteLine($"Id: {ul.Id}, Usuario: {ul.Usuario}, Logro: {ul.Logro}, FechaObtencion: {ul.FechaObtencion.ToShortDateString()}");
+
+    Console.WriteLine("\n--- Recompensas ---");
+    foreach (var r in datos.Recompensas)
+        Console.WriteLine($"Id: {r.Id}, Nombre: {r.Nombre}, NivelRequerido: {r.NivelRequerido}, EsEstetica: {r.EsEstetica}");
+
+    Console.WriteLine("\n--- HistorialesDesbloqueo ---");
+    foreach (var h in datos.HistorialesDesbloqueo)
+        Console.WriteLine($"Id: {h.Id}, Usuario: {h.Usuario}, Recompensa: {h.Recompensa}, FechaObtencion: {h.FechaObtencion.ToShortDateString()}");
+
+    Console.WriteLine("\n--- EstadisticasUsuarios ---");
+    foreach (var e in datos.EstadisticasUsuarios)
+        Console.WriteLine($"Id: {e.Id}, Usuario: {e.Usuario}, Mes: {e.Mes}, XpGanadaMes: {e.XpGanadaMes}");
+
+    Console.WriteLine("\n--- MetricasGlobales ---");
+    foreach (var m in datos.MetricasGlobales)
+        Console.WriteLine($"Id: {m.Id}, TotalUsuariosActivos: {m.TotalUsuariosActivos}, HabitoMasPopular: {m.HabitoMasPopular}");
+
+    Console.WriteLine("\n--- Grupos ---");
+    foreach (var g in datos.Grupos)
+        Console.WriteLine($"Id: {g.Id}, Nombre: {g.Nombre}, Administrador: {g.Administrador}");
+
+    Console.WriteLine("\n--- UsuariosGrupos ---");
+    foreach (var ug in datos.UsuariosGrupos)
+        Console.WriteLine($"Id: {ug.Id}, Grupo: {ug.Grupo}, Usuario: {ug.Usuario}, Rol: {ug.Rol}");
+
+    Console.WriteLine("\n--- Desafios ---");
+    foreach (var d in datos.Desafios)
+        Console.WriteLine($"Id: {d.Id}, Nombre: {d.Nombre}, GrupoAdministrador: {d.GrupoAdministrador}, FechaInicio: {d.FechaInicio.ToShortDateString()}, FechaFin: {d.FechaFin.ToShortDateString()}");
+
+    Console.WriteLine("\n--- ParticipacionDesafios ---");
+    foreach (var pd in datos.ParticipacionDesafios)
+        Console.WriteLine($"Id: {pd.Id}, Desafio: {pd.Desafio}, UsuariosGrupo: {pd.UsuariosGrupo}, ProgresoActual: {pd.ProgresoActual}, RankingPosicion: {pd.RankingPosicion}");
+}
 
 public class DatosDemo
 {
@@ -404,7 +470,7 @@ public static class GeneradorDatosDemo
         }
 
         return datos;
-    }
+    } 
 }
 
 public class Usuarios
