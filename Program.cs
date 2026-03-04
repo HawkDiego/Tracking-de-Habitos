@@ -491,6 +491,49 @@ public class Usuarios
     public List<EstadisticasUsuarios>? EstadisticasUsuario { get; set; }
     public List<UsuariosGrupos>? UsuariosGrupos { get; set; }
 
+    public static Usuarios Registrar(
+        List<Usuarios> usuarios,
+        List<Configuraciones> configuraciones,
+        List<Niveles> niveles,
+        string nombre,
+        string email,
+        string clave,
+        int? idConfiguracion = null,
+        int xpInicial = 0)
+    {
+        if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentException("Nombre obligatorio.");
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) throw new ArgumentException("Email inválido.");
+        if (string.IsNullOrWhiteSpace(clave) || clave.Length < 8) throw new ArgumentException("Clave mínima de 8 caracteres.");
+        if (usuarios.Any(u => string.Equals(u.Email, email, StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException("Email ya registrado.");
+
+        Configuraciones configuracion = idConfiguracion.HasValue
+            ? configuraciones.FirstOrDefault(c => c.Id == idConfiguracion.Value)
+                ?? throw new InvalidOperationException("Configuración no existe.")
+            : Configuraciones.CrearConfiguracion(configuraciones, "claro", "es");
+
+        int nivelCalculado = (xpInicial / 100) + 1;
+        Niveles nivel = niveles.FirstOrDefault(n => n.Id == nivelCalculado)
+            ?? throw new InvalidOperationException("Nivel no existe.");
+
+        Usuarios nuevoUsuario = new Usuarios
+        {
+            Id = usuarios.Count == 0 ? 1 : usuarios.Max(u => u.Id) + 1,
+            Nombre = nombre.Trim(),
+            Email = email.Trim().ToLower(),
+            Clave = clave,
+            FechaRegistro = DateTime.Today,
+            xpTotal = xpInicial,
+            Nivel = nivelCalculado,
+            Configuracion = configuracion.Id,
+            _Configuracion = configuracion,
+            _Nivel = nivel
+        };
+
+        usuarios.Add(nuevoUsuario);
+        return nuevoUsuario;
+    }
+
 }
 
 public class Niveles
@@ -513,6 +556,37 @@ public class Configuraciones
     public bool Notificaciones { get; set; }
     public bool SonidoAlerta { get; set; }
     public List<Usuarios>? Usuarios { get; set; }
+
+    public static Configuraciones CrearConfiguracion(
+        List<Configuraciones> configuraciones,
+        string tema,
+        string idioma,
+        string? zonaHoraria = null,
+        bool notificaciones = true,
+        bool sonidoAlerta = true)
+    {
+        string temaNormalizado = (tema ?? "").Trim().ToLower();
+        string idiomaNormalizado = (idioma ?? "").Trim().ToLower();
+
+        if (temaNormalizado != "claro" && temaNormalizado != "oscuro")
+            throw new ArgumentException("Tema inválido.");
+
+        if (idiomaNormalizado.Length != 2)
+            throw new ArgumentException("Idioma inválido.");
+
+        Configuraciones nueva = new Configuraciones
+        {
+            Id = configuraciones.Count == 0 ? 1 : configuraciones.Max(c => c.Id) + 1,
+            Tema = temaNormalizado,
+            Idioma = idiomaNormalizado,
+            ZonaHoraria = string.IsNullOrWhiteSpace(zonaHoraria) ? "America/Bogota" : zonaHoraria,
+            Notificaciones = notificaciones,
+            SonidoAlerta = sonidoAlerta
+        };
+
+        configuraciones.Add(nueva);
+        return nueva;
+    }
 }
 
 public class BaseHabitos
@@ -538,6 +612,47 @@ public class Habitos: BaseHabitos
     public List<RegistroProgresos>? RegistroProgreso { get; set; }
     public List<Recordatorios>? Recordatorios { get; set; }
     public List<Rachas>? Rachas { get; set; }
+
+    public static Habitos Crear(
+        List<Habitos> habitos,
+        List<Usuarios> usuarios,
+        List<Categorias> categorias,
+        List<Frecuencias> frecuencias,
+        List<HabitosPlantilla> habitosPlantilla,
+        int idUsuario,
+        string nombre,
+        string descripcion,
+        int idCategoria,
+        int idFrecuencia,
+        int xpOtorgada,
+        int? idPlantilla = null,
+        bool activo = true)
+    {
+        if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentException("Nombre obligatorio.");
+        if (xpOtorgada < 0) throw new ArgumentException("XP no puede ser negativo.");
+        if (!usuarios.Any(u => u.Id == idUsuario)) throw new InvalidOperationException("Usuario no existe.");
+        if (!categorias.Any(c => c.Id == idCategoria)) throw new InvalidOperationException("Categoría no existe.");
+        if (!frecuencias.Any(f => f.Id == idFrecuencia)) throw new InvalidOperationException("Frecuencia no existe.");
+        if (idPlantilla.HasValue && !habitosPlantilla.Any(p => p.Id == idPlantilla.Value))
+            throw new InvalidOperationException("Plantilla no existe.");
+
+        Habitos nuevo = new Habitos
+        {
+            Id = habitos.Count == 0 ? 1 : habitos.Max(h => h.Id) + 1,
+            Usuario = idUsuario,
+            Nombre = nombre.Trim(),
+            Descripcion = descripcion,
+            FechaCreacion = DateTime.Today,
+            Activo = activo,
+            XpOtorgada = xpOtorgada,
+            Categoria = idCategoria,
+            Frecuencia = idFrecuencia,
+            _HabitoPlantilla = idPlantilla.HasValue ? habitosPlantilla.First(p => p.Id == idPlantilla.Value) : null
+        };
+
+        habitos.Add(nuevo);
+        return nuevo;
+    }
 }
 
 public class HabitosPlantilla: BaseHabitos
@@ -560,6 +675,27 @@ public class Categorias
     public List<Habitos>? Habitos { get; set; }
     public List<HabitosPlantilla>? HabitosPlantilla { get; set; }
     public List<MetricasGlobales>? MetricasGlobales { get; set; }
+
+    public static List<Habitos> ObtenerHabitosDeCategoria(
+        List<Habitos> habitos,
+        int idCategoria,
+        int? idUsuario = null,
+        bool soloActivos = true)
+    {
+        IEnumerable<Habitos> consulta = habitos.Where(h => h.Categoria == idCategoria);
+
+        if (idUsuario.HasValue)
+        {
+            consulta = consulta.Where(h => h.Usuario == idUsuario.Value);
+        }
+
+        if (soloActivos)
+        {
+            consulta = consulta.Where(h => h.Activo);
+        }
+
+        return consulta.ToList();
+    }
 }
 
 public class Frecuencias
@@ -581,6 +717,56 @@ public class RegistroProgresos
     public int XpGanada { get; set; }
     public Habitos? _Habito { get; set; }
     public List<Notas>? Notas { get; set; }
+
+    public static RegistroProgresos Registrar(
+        List<RegistroProgresos> registros,
+        List<Habitos> habitos,
+        List<Rachas> rachas,
+        List<Usuarios> usuarios,
+        List<Niveles> niveles,
+        int idHabito,
+        DateTime fechaLogro,
+        bool completado,
+        int cantidadUnidades = 1)
+    {
+        if (cantidadUnidades < 1) throw new ArgumentException("Cantidad mínima 1.");
+
+        Habitos habito = habitos.FirstOrDefault(h => h.Id == idHabito)
+            ?? throw new InvalidOperationException("Hábito no existe.");
+
+        int xpCalculada = 0;
+        if (habito.Activo && completado)
+        {
+            decimal baseXp = habito.XpOtorgada ?? 0;
+            decimal multiplicador = rachas.FirstOrDefault(r => r.Habito == idHabito)?.MultiplicadorXp ?? 1.0m;
+            decimal bonus = 1 + ((cantidadUnidades - 1) * 0.1m);
+            xpCalculada = (int)Math.Round(baseXp * multiplicador * bonus);
+        }
+
+        RegistroProgresos nuevo = new RegistroProgresos
+        {
+            Id = registros.Count == 0 ? 1 : registros.Max(r => r.Id) + 1,
+            Habito = idHabito,
+            FechaLogro = fechaLogro,
+            Completado = completado,
+            XpGanada = xpCalculada,
+            _Habito = habito
+        };
+
+        registros.Add(nuevo);
+
+        Usuarios? usuario = usuarios.FirstOrDefault(u => u.Id == habito.Usuario);
+        if (usuario != null && xpCalculada > 0)
+        {
+            int nuevoXp = (usuario.xpTotal ?? 0) + xpCalculada;
+            int nuevoNivel = (nuevoXp / 100) + 1;
+            usuario.xpTotal = nuevoXp;
+            usuario.Nivel = nuevoNivel;
+            usuario._Nivel = niveles.FirstOrDefault(n => n.Id == nuevoNivel);
+        }
+
+        return nuevo;
+    }
 }
 
 public class Notas
