@@ -1,0 +1,15 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace lib_aplicaciones.entidades;
+
+public class Recordatorios
+{
+    public int Id { get; set; }
+    public int Habito { get; set; }
+    public string? HoraEjecucion { get; set; }
+    public string? Mensaje { get; set; }
+    public bool Activo { get; set; }
+
+    [ForeignKey("Habito")]
+    public Habitos? _Habito { get; set; }
+}

@@ -1,0 +1,18 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace lib_aplicaciones.entidades;
+
+public class ParticipacionDesafios
+{
+    public int Id { get; set; }
+    public int Desafio { get; set; }
+    public int UsuariosGrupo { get; set; }
+    public decimal ProgresoActual { get; set; }
+    public int RankingPosicion { get; set; }
+
+    [ForeignKey("Desafio")]
+    public Desafios? _Desafio { get; set; }
+
+    [ForeignKey("UsuariosGrupo")]
+    public UsuariosGrupos? _UsuariosGrupo { get; set; }
+}
