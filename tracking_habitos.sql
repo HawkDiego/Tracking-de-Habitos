@@ -4,11 +4,12 @@ USE tracking_habitos;
 GO
 
 CREATE TABLE [Niveles] (
-                           [Id] INT NOT NULL IDENTITY(1, 1),
-                           [Nombre] NVARCHAR(100) NOT NULL,
-                           [LimiteInferiorXp] INT NOT NULL,
-                           [LimiteSuperiorXp] INT NOT NULL,
-                           [Descripcion] NVARCHAR(300) NOT NULL,
+                           [Id]               INT          NOT NULL IDENTITY(1, 1),
+                           [Nombre]           NVARCHAR(100) NOT NULL,
+                           [LimiteInferiorXp] INT          NOT NULL,
+                           [LimiteSuperiorXp] INT          NOT NULL,
+                           [Descripcion]      NVARCHAR(300) NOT NULL,
+                           [Estado]           INT               NULL,
 
                            CONSTRAINT PK_Niveles PRIMARY KEY (id)
 );
@@ -25,11 +26,12 @@ VALUES
 SELECT * FROM Niveles;
 
 CREATE TABLE [Categorias] (
-                              [Id] INT NOT NULL IDENTITY(1, 1),
-                              [Nombre] NVARCHAR(100) NOT NULL,
-                              [Color] NVARCHAR(7),
-                              [Icono] NVARCHAR(10),
+                              [Id]          INT           NOT NULL IDENTITY(1, 1),
+                              [Nombre]      NVARCHAR(100) NOT NULL,
+                              [Color]       NVARCHAR(7),
+                              [Icono]       NVARCHAR(10),
                               [Descripcion] NVARCHAR(300),
+                              [Estado]      INT               NULL,
 
                               CONSTRAINT PK_Categorias PRIMARY KEY (id)
 
@@ -46,11 +48,12 @@ VALUES
 SELECT * FROM Categorias;
 
 CREATE TABLE [Frecuencias] (
-                               [Id]             INT          NOT NULL IDENTITY(1,1),
-                               [TipoIntervalo]  NVARCHAR(50) NOT NULL,
-                               [DiasSemana]     NVARCHAR(100)    NULL,
-                               [VecesPorDia]    INT          NOT NULL,
-                               [esPersonalizada] BIT         NOT NULL,
+                               [Id]              INT           NOT NULL IDENTITY(1,1),
+                               [TipoIntervalo]   NVARCHAR(50)  NOT NULL,
+                               [DiasSemana]      NVARCHAR(100)     NULL,
+                               [VecesPorDia]     INT           NOT NULL,
+                               [esPersonalizada] BIT           NOT NULL,
+                               [Estado]          INT               NULL,
                                CONSTRAINT PK_Frecuencias PRIMARY KEY ([Id])
 );
 
@@ -65,11 +68,12 @@ INSERT INTO [Frecuencias] ([TipoIntervalo], [DiasSemana], [VecesPorDia], [esPers
 SELECT * FROM Frecuencias;
 
 CREATE TABLE [Logros] (
-                          [Id] INT NOT NULL IDENTITY(1, 1),
-                          [Titulo] NVARCHAR(100) NOT NULL,
-                          [DescripcionRequisito] NVARCHAR(500) NULL,
-                          [XpOtorgada] INT NOT NULL,
-                          [ImagenUrl] NVARCHAR(300) NULL,
+                          [Id]                   INT           NOT NULL IDENTITY(1, 1),
+                          [Titulo]               NVARCHAR(100) NOT NULL,
+                          [DescripcionRequisito] NVARCHAR(500)     NULL,
+                          [XpOtorgada]           INT           NOT NULL,
+                          [ImagenUrl]            NVARCHAR(300)     NULL,
+                          [Estado]               INT               NULL,
                           CONSTRAINT PK_Logros PRIMARY KEY (id)
 );
 
@@ -83,15 +87,16 @@ INSERT INTO [Logros] ([Titulo], [DescripcionRequisito], [XpOtorgada], [ImagenUrl
                                                                                        ('Dedicado',           'Completa 50 hábitos en total',               200, NULL),
                                                                                        ('Explorador',         'Crea hábitos en 3 categorías distintas',     150, NULL),
                                                                                        ('Nivel 5',            'Alcanza el nivel 5',                         250, NULL),
-                                                                                       ('Madrugador',         'Registra un hábito antes de las 7am',        80,  NULL);   
+                                                                                       ('Madrugador',         'Registra un hábito antes de las 7am',        80,  NULL);
 
 CREATE TABLE [Configuraciones] (
                                    [Id]             INT           NOT NULL IDENTITY(1,1),
-                                   [Tema]           NVARCHAR(20)  NULL,
-                                   [Idioma]         NVARCHAR(10)  NULL,
-                                   [ZonaHoraria]    NVARCHAR(100) NULL,
+                                   [Tema]           NVARCHAR(20)      NULL,
+                                   [Idioma]         NVARCHAR(10)      NULL,
+                                   [ZonaHoraria]    NVARCHAR(100)     NULL,
                                    [Notificaciones] BIT           NOT NULL,
                                    [SonidoAlerta]   BIT           NOT NULL,
+                                   [Estado]         INT               NULL,
 
                                    CONSTRAINT PK_Configuraciones PRIMARY KEY ([Id])
 );
@@ -110,9 +115,10 @@ SELECT * FROM Configuraciones;
 CREATE TABLE [Recompensas] (
                                [Id]             INT           NOT NULL IDENTITY(1,1),
                                [Nombre]         NVARCHAR(100) NOT NULL,
-                               [Descripcion]    NVARCHAR(300) NULL,
-                               [NivelRequerido] INT           NULL,
+                               [Descripcion]    NVARCHAR(300)     NULL,
+                               [NivelRequerido] INT               NULL,
                                [EsEstetica]     BIT           NOT NULL,
+                               [Estado]         INT               NULL,
 
                                CONSTRAINT PK_Recompensas          PRIMARY KEY ([Id]),
                                CONSTRAINT FK_Recompensas_Niveles   FOREIGN KEY ([NivelRequerido]) REFERENCES [Niveles]([Id])
@@ -138,6 +144,7 @@ CREATE TABLE [Usuarios] (
                             [xpTotal]        INT               NULL,
                             [Nivel]          INT               NULL,
                             [Configuracion]  INT               NULL,
+                            [Estado]         INT               NULL,
 
                             CONSTRAINT PK_Usuarios              PRIMARY KEY ([Id]),
                             CONSTRAINT FK_Usuarios_Niveles       FOREIGN KEY ([Nivel])         REFERENCES [Niveles]([Id]),
@@ -159,24 +166,24 @@ CREATE TABLE [HabitosPlantilla] (
                                     [Nombre]        NVARCHAR(100) NOT NULL,
                                     [Descripcion]   NVARCHAR(300)     NULL,
                                     [FechaCreacion] DATETIME      NOT NULL,
-                                    [Activo]        BIT           NOT NULL,
                                     [XpOtorgada]    INT               NULL,
                                     [Categoria]     INT               NULL,
                                     [Frecuencia]    INT               NULL,
                                     [EsOficial]     BIT           NOT NULL,
+                                    [Estado]        INT               NULL,
 
                                     CONSTRAINT PK_HabitosPlantilla              PRIMARY KEY ([Id]),
                                     CONSTRAINT FK_HabitosPlantilla_Categorias   FOREIGN KEY ([Categoria])  REFERENCES [Categorias]([Id]),
                                     CONSTRAINT FK_HabitosPlantilla_Frecuencias  FOREIGN KEY ([Frecuencia]) REFERENCES [Frecuencias]([Id])
 );
 
-INSERT INTO [HabitosPlantilla] ([Nombre], [Descripcion], [FechaCreacion], [Activo], [XpOtorgada], [Categoria], [Frecuencia], [EsOficial])
+INSERT INTO [HabitosPlantilla] ([Nombre], [Descripcion], [FechaCreacion], [XpOtorgada], [Categoria], [Frecuencia], [EsOficial])
 VALUES
-    ('Caminar 30 minutos',  'Actividad física ligera diaria',       '2024-09-22', 1, 20, 1, NULL, 1),
-    ('Leer 20 páginas',     'Lectura constante para aprendizaje',   '2024-12-22', 1, 25, 2, NULL, 1),
-    ('Plan diario',         'Planificar tareas clave del día',      '2025-03-22', 1, 18, 3, NULL, 1),
-    ('Registrar gastos',    'Anotar gastos del día',                '2025-06-22', 1, 15, 4, NULL, 0),
-    ('Meditar 10 minutos',  'Pausa de respiración consciente',      '2025-09-22', 1, 22, 5, NULL, 1);
+    ('Caminar 30 minutos',  'Actividad física ligera diaria',       '2024-09-22', 20, 1, NULL, 1),
+    ('Leer 20 páginas',     'Lectura constante para aprendizaje',   '2024-12-22', 25, 2, NULL, 1),
+    ('Plan diario',         'Planificar tareas clave del día',      '2025-03-22', 18, 3, NULL, 1),
+    ('Registrar gastos',    'Anotar gastos del día',                '2025-06-22', 15, 4, NULL, 0),
+    ('Meditar 10 minutos',  'Pausa de respiración consciente',      '2025-09-22', 22, 5, NULL, 1);
 
 SELECT * FROM HabitosPlantilla;
 
@@ -186,10 +193,10 @@ CREATE TABLE [Habitos] (
                            [Nombre]        NVARCHAR(100) NOT NULL,
                            [Descripcion]   NVARCHAR(300)     NULL,
                            [FechaCreacion] DATETIME      NOT NULL,
-                           [Activo]        BIT           NOT NULL,
                            [XpOtorgada]    INT               NULL,
                            [Categoria]     INT               NULL,
                            [Frecuencia]    INT               NULL,
+                           [Estado]        INT               NULL,
 
                            CONSTRAINT PK_Habitos              PRIMARY KEY ([Id]),
                            CONSTRAINT FK_Habitos_Usuarios     FOREIGN KEY ([Usuario])   REFERENCES [Usuarios]([Id]),
@@ -197,21 +204,22 @@ CREATE TABLE [Habitos] (
                            CONSTRAINT FK_Habitos_Frecuencias  FOREIGN KEY ([Frecuencia]) REFERENCES [Frecuencias]([Id])
 );
 
-INSERT INTO [Habitos] ([Usuario], [Nombre], [Descripcion], [FechaCreacion], [Activo], [XpOtorgada], [Categoria], [Frecuencia])
+INSERT INTO [Habitos] ([Usuario], [Nombre], [Descripcion], [FechaCreacion], [XpOtorgada], [Categoria], [Frecuencia])
 VALUES
-    (1, 'Caminar temprano',    'Caminar antes de iniciar labores',       '2025-10-22', 1, 20, 1, 1),
-    (1, 'Lectura técnica',     'Leer documentación 25 minutos',         '2025-11-22', 1, 25, 2, 2),
-    (2, 'Bloques de foco',     'Dos sesiones de enfoque profundo',      '2025-12-22', 1, 30, 3, 3),
-    (3, 'Control de gastos',   'Registrar gastos del día',              '2026-01-22', 1, 15, 4, 4),
-    (4, 'Meditación nocturna', 'Meditar antes de dormir',               '2026-02-22', 1, 22, 5, 5);
+    (1, 'Caminar temprano',    'Caminar antes de iniciar labores',       '2025-10-22', 20, 1, 1),
+    (1, 'Lectura técnica',     'Leer documentación 25 minutos',         '2025-11-22', 25, 2, 2),
+    (2, 'Bloques de foco',     'Dos sesiones de enfoque profundo',      '2025-12-22', 30, 3, 3),
+    (3, 'Control de gastos',   'Registrar gastos del día',              '2026-01-22', 15, 4, 4),
+    (4, 'Meditación nocturna', 'Meditar antes de dormir',               '2026-02-22', 22, 5, 5);
 
 SELECT * FROM Habitos;
 
 CREATE TABLE [Grupos] (
-                          [Id]             INT           NOT NULL IDENTITY(1,1),
-                          [Nombre]         NVARCHAR(100) NOT NULL,
-                          [Descripcion]    NVARCHAR(300)     NULL,
-                          [Administrador]  INT           NOT NULL,
+                          [Id]            INT           NOT NULL IDENTITY(1,1),
+                          [Nombre]        NVARCHAR(100) NOT NULL,
+                          [Descripcion]   NVARCHAR(300)     NULL,
+                          [Administrador] INT           NOT NULL,
+                          [Estado]        INT               NULL,
 
                           CONSTRAINT PK_Grupos              PRIMARY KEY ([Id]),
                           CONSTRAINT FK_Grupos_Usuarios     FOREIGN KEY ([Administrador]) REFERENCES [Usuarios]([Id])
@@ -228,10 +236,11 @@ VALUES
 SELECT * FROM Grupos;
 
 CREATE TABLE [UsuariosLogros] (
-                                  [Id]              INT      NOT NULL IDENTITY(1,1),
-                                  [Usuario]         INT      NOT NULL,
-                                  [Logro]           INT      NOT NULL,
-                                  [FechaObtencion]  DATETIME NOT NULL,
+                                  [Id]             INT      NOT NULL IDENTITY(1,1),
+                                  [Usuario]        INT      NOT NULL,
+                                  [Logro]          INT      NOT NULL,
+                                  [FechaObtencion] DATETIME NOT NULL,
+                                  [Estado]         INT          NULL,
 
                                   CONSTRAINT PK_UsuariosLogros           PRIMARY KEY ([Id]),
                                   CONSTRAINT FK_UsuariosLogros_Usuarios  FOREIGN KEY ([Usuario]) REFERENCES [Usuarios]([Id]),
@@ -255,6 +264,7 @@ CREATE TABLE [RegistroProgresos] (
                                      [FechaLogro] DATETIME NOT NULL,
                                      [Completado] BIT      NOT NULL,
                                      [XpGanada]   INT      NOT NULL,
+                                     [Estado]     INT          NULL,
 
                                      CONSTRAINT PK_RegistroProgresos            PRIMARY KEY ([Id]),
                                      CONSTRAINT FK_RegistroProgresos_Habitos    FOREIGN KEY ([Habito]) REFERENCES [Habitos]([Id])
@@ -275,19 +285,19 @@ CREATE TABLE [Recordatorios] (
                                  [Habito]        INT           NOT NULL,
                                  [HoraEjecucion] NVARCHAR(10)  NOT NULL,
                                  [Mensaje]       NVARCHAR(300)     NULL,
-                                 [Activo]        BIT           NOT NULL,
+                                 [Estado]        INT               NULL,
 
                                  CONSTRAINT PK_Recordatorios           PRIMARY KEY ([Id]),
                                  CONSTRAINT FK_Recordatorios_Habitos   FOREIGN KEY ([Habito]) REFERENCES [Habitos]([Id])
 );
 
-INSERT INTO [Recordatorios] ([Habito], [HoraEjecucion], [Mensaje], [Activo])
+INSERT INTO [Recordatorios] ([Habito], [HoraEjecucion], [Mensaje])
 VALUES
-    (1, '06:30', 'Hora de caminar 30 minutos',    1),
-    (2, '20:00', 'Momento de lectura técnica',     1),
-    (3, '09:00', 'Inicia primer bloque de foco',   1),
-    (4, '21:00', 'Registra los gastos del día',    1),
-    (5, '22:30', 'Respira y medita 10 minutos',    1);
+    (1, '06:30', 'Hora de caminar 30 minutos'),
+    (2, '20:00', 'Momento de lectura técnica'),
+    (3, '09:00', 'Inicia primer bloque de foco'),
+    (4, '21:00', 'Registra los gastos del día'),
+    (5, '22:30', 'Respira y medita 10 minutos');
 
 SELECT * FROM Recordatorios;
 
@@ -298,6 +308,7 @@ CREATE TABLE [Rachas] (
                           [MaximaHistorica]       INT               NULL,
                           [FechaUltimoIncremento] DATETIME          NULL,
                           [MultiplicadorXp]       DECIMAL(5,2)      NULL,
+                          [Estado]                INT               NULL,
 
                           CONSTRAINT PK_Rachas           PRIMARY KEY ([Id]),
                           CONSTRAINT FK_Rachas_Habitos   FOREIGN KEY ([Habito]) REFERENCES [Habitos]([Id])
@@ -314,10 +325,11 @@ VALUES
 SELECT * FROM Rachas;
 
 CREATE TABLE [HistorialesDesbloqueo] (
-                                         [Id]              INT      NOT NULL IDENTITY(1,1),
-                                         [Usuario]         INT      NOT NULL,
-                                         [Recompensa]      INT      NOT NULL,
-                                         [FechaObtencion]  DATETIME NOT NULL,
+                                         [Id]             INT      NOT NULL IDENTITY(1,1),
+                                         [Usuario]        INT      NOT NULL,
+                                         [Recompensa]     INT      NOT NULL,
+                                         [FechaObtencion] DATETIME NOT NULL,
+                                         [Estado]         INT          NULL,
 
                                          CONSTRAINT PK_HistorialesDesbloqueo              PRIMARY KEY ([Id]),
                                          CONSTRAINT FK_HistorialesDesbloqueo_Usuarios     FOREIGN KEY ([Usuario])    REFERENCES [Usuarios]([Id]),
@@ -335,15 +347,16 @@ VALUES
 SELECT * FROM HistorialesDesbloqueo;
 
 CREATE TABLE [EstadisticasUsuarios] (
-                                        [Id]                  INT      NOT NULL IDENTITY(1,1),
-                                        [Usuario]             INT      NOT NULL,
-                                        [Mes]                 INT      NOT NULL,
-                                        [Anio]                INT      NOT NULL,
-                                        [HabitosCompletados]  INT      NOT NULL,
-                                        [XpGanadaMes]         INT      NOT NULL,
-                                        [MejorRacha]          INT      NOT NULL,
-                                        [TotalNotas]          INT      NOT NULL,
-                                        [FechaCalculo]        DATETIME NOT NULL,
+                                        [Id]                 INT      NOT NULL IDENTITY(1,1),
+                                        [Usuario]            INT      NOT NULL,
+                                        [Mes]                INT      NOT NULL,
+                                        [Anio]               INT      NOT NULL,
+                                        [HabitosCompletados] INT      NOT NULL,
+                                        [XpGanadaMes]        INT      NOT NULL,
+                                        [MejorRacha]         INT      NOT NULL,
+                                        [TotalNotas]         INT      NOT NULL,
+                                        [FechaCalculo]       DATETIME NOT NULL,
+                                        [Estado]             INT          NULL,
 
                                         CONSTRAINT PK_EstadisticasUsuarios            PRIMARY KEY ([Id]),
                                         CONSTRAINT FK_EstadisticasUsuarios_Usuarios   FOREIGN KEY ([Usuario]) REFERENCES [Usuarios]([Id])
@@ -360,12 +373,13 @@ VALUES
 SELECT * FROM EstadisticasUsuarios;
 
 CREATE TABLE [MetricasGlobales] (
-                                    [Id]                    INT      NOT NULL IDENTITY(1,1),
-                                    [TotalUsuariosActivos]  INT      NOT NULL,
-                                    [PromedioXpPlataforma]  INT      NOT NULL,
-                                    [HabitoMasPopular]      INT      NOT NULL,
-                                    [CategoriaMasUsada]     INT      NOT NULL,
-                                    [FechaCalculo]          DATETIME NOT NULL,
+                                    [Id]                   INT      NOT NULL IDENTITY(1,1),
+                                    [TotalUsuariosActivos] INT      NOT NULL,
+                                    [PromedioXpPlataforma] INT      NOT NULL,
+                                    [HabitoMasPopular]     INT      NOT NULL,
+                                    [CategoriaMasUsada]    INT      NOT NULL,
+                                    [FechaCalculo]         DATETIME NOT NULL,
+                                    [Estado]               INT          NULL,
 
                                     CONSTRAINT PK_MetricasGlobales                     PRIMARY KEY ([Id]),
                                     CONSTRAINT FK_MetricasGlobales_HabitosPlantilla    FOREIGN KEY ([HabitoMasPopular])  REFERENCES [HabitosPlantilla]([Id]),
@@ -388,6 +402,7 @@ CREATE TABLE [UsuariosGrupos] (
                                   [Usuario]    INT          NOT NULL,
                                   [Rol]        NVARCHAR(50)     NULL,
                                   [FechaUnion] DATETIME     NOT NULL,
+                                  [Estado]     INT              NULL,
 
                                   CONSTRAINT PK_UsuariosGrupos            PRIMARY KEY ([Id]),
                                   CONSTRAINT FK_UsuariosGrupos_Grupos     FOREIGN KEY ([Grupo])   REFERENCES [Grupos]([Id]),
@@ -405,13 +420,14 @@ VALUES
 SELECT * FROM UsuariosGrupos;
 
 CREATE TABLE [Desafios] (
-                            [Id]                  INT           NOT NULL IDENTITY(1,1),
-                            [GrupoAdministrador]  INT           NOT NULL,
-                            [Nombre]              NVARCHAR(100) NOT NULL,
-                            [Descripcion]         NVARCHAR(300)     NULL,
-                            [FechaInicio]         DATETIME      NOT NULL,
-                            [FechaFin]            DATETIME      NOT NULL,
-                            [XpBono]              INT           NOT NULL,
+                            [Id]                 INT           NOT NULL IDENTITY(1,1),
+                            [GrupoAdministrador] INT           NOT NULL,
+                            [Nombre]             NVARCHAR(100) NOT NULL,
+                            [Descripcion]        NVARCHAR(300)     NULL,
+                            [FechaInicio]        DATETIME      NOT NULL,
+                            [FechaFin]           DATETIME      NOT NULL,
+                            [XpBono]             INT           NOT NULL,
+                            [Estado]             INT               NULL,
 
                             CONSTRAINT PK_Desafios           PRIMARY KEY ([Id]),
                             CONSTRAINT FK_Desafios_Grupos    FOREIGN KEY ([GrupoAdministrador]) REFERENCES [Grupos]([Id])
@@ -434,6 +450,7 @@ CREATE TABLE [Notas] (
                          [EstadoDeAnimoEmoji] NVARCHAR(10)      NULL,
                          [EsPrivada]          BIT           NOT NULL,
                          [RegistroProgreso]   INT               NULL,
+                         [Estado]             INT               NULL,
 
                          CONSTRAINT PK_Notas                        PRIMARY KEY ([Id]),
                          CONSTRAINT FK_Notas_RegistroProgresos      FOREIGN KEY ([RegistroProgreso]) REFERENCES [RegistroProgresos]([Id])
@@ -455,6 +472,7 @@ CREATE TABLE [ParticipacionDesafios] (
                                          [UsuariosGrupo]   INT          NOT NULL,
                                          [ProgresoActual]  DECIMAL(5,2) NOT NULL,
                                          [RankingPosicion] INT          NOT NULL,
+                                         [Estado]          INT              NULL,
 
                                          CONSTRAINT PK_ParticipacionDesafios                    PRIMARY KEY ([Id]),
                                          CONSTRAINT FK_ParticipacionDesafios_Desafios           FOREIGN KEY ([Desafio])       REFERENCES [Desafios]([Id]),
