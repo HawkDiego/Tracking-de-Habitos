@@ -9,7 +9,7 @@ public class Logros
     public string? DescripcionRequisito { get; set; }
     public int?    XpOtorgada           { get; set; }
     public string? ImagenUrl            { get; set; }
-    public int?    Estado               { get; set; }
+    public int?     Estado               { get; set; }
 
     [NotMapped]
     public List<UsuariosLogros>? UsuariosLogros { get; set; }
