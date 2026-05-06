@@ -9,6 +9,7 @@ public class Niveles
     public int LimiteInferiorXp { get; set; }
     public int LimiteSuperiorXp { get; set; }
     public string? Descripcion { get; set; }
+    public int? Estado { get; set; }
     [NotMapped]
     public List<Usuarios>? Usuarios { get; set; }
     [NotMapped]

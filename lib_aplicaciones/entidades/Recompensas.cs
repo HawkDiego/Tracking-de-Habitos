@@ -9,6 +9,7 @@ public class Recompensas
     public string? Descripcion    { get; set; }
     public int?    NivelRequerido { get; set; }
     public bool    EsEstetica     { get; set; }
+    public int?    Estado         { get; set; }
 
     [ForeignKey("NivelRequerido")]
     public Niveles? _NivelRequerido { get; set; }

@@ -8,6 +8,7 @@ public class HistorialesDesbloqueo
     public int Usuario { get; set; }
     public int Recompensa { get; set; }
     public DateTime FechaObtencion { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Usuario")]
     public Usuarios? _Usuario { get; set; }

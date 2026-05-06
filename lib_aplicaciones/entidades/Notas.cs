@@ -10,7 +10,7 @@ public class Notas
     public string? EstadoDeAnimoEmoji { get; set; }
     public bool EsPrivada { get; set; }
     public int? RegistroProgreso { get; set; }
-
+    public int? Estado { get; set; }
     [ForeignKey("RegistroProgreso")]
     public RegistroProgresos? _RegistroProgreso { get; set; }
 }

@@ -8,6 +8,7 @@ public class UsuariosLogros
     public int Usuario { get; set; }
     public int Logro { get; set; }
     public DateTime FechaObtencion { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Usuario")]
     public Usuarios? _Usuario { get; set; }

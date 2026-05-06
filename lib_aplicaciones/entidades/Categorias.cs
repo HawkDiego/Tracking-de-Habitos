@@ -9,6 +9,7 @@ public class Categorias
     public string? Descripcion { get; set; }
     public string? Color{ get; set; }
     public string? Icono { get; set; }
+    public int? Estado { get; set; }
     
     [NotMapped]
     public List<Habitos>? Habitos { get; set; }

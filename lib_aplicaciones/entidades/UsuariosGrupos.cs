@@ -9,6 +9,7 @@ public class UsuariosGrupos
     public int Usuario { get; set; }
     public string? Rol { get; set; }
     public DateTime FechaUnion { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Grupo")]
     public Grupos? _Grupo { get; set; }

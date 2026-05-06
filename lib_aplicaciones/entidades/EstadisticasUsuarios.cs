@@ -13,6 +13,7 @@ public class EstadisticasUsuarios
     public int MejorRacha { get; set; }
     public int TotalNotas { get; set; }
     public DateTime FechaCalculo { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Usuario")]
     public Usuarios? _Usuario { get; set; }

@@ -11,6 +11,7 @@ public class Desafios
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
     public int XpBono { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("GrupoAdministrador")]
     public Grupos? _Grupo { get; set; }

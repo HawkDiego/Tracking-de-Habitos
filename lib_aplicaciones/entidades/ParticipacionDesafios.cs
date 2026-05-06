@@ -9,6 +9,7 @@ public class ParticipacionDesafios
     public int UsuariosGrupo { get; set; }
     public decimal ProgresoActual { get; set; }
     public int RankingPosicion { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Desafio")]
     public Desafios? _Desafio { get; set; }

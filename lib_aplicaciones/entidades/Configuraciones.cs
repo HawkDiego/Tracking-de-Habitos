@@ -10,6 +10,7 @@ public class Configuraciones
     public string? ZonaHoraria { get; set; }
     public bool Notificaciones { get; set; }
     public bool SonidoAlerta { get; set; }
+    public int? Estado { get; set; }
     
     [NotMapped]
     public List<Usuarios>? Usuarios { get; set; }

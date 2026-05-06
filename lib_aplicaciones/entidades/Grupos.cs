@@ -8,6 +8,7 @@ public class Grupos
     public string? Nombre { get; set; }
     public string? Descripcion { get; set; }
     public int Administrador { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Administrador")]
     public Usuarios? _Administrador { get; set; }

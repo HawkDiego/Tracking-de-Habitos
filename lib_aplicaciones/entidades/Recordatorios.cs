@@ -8,7 +8,8 @@ public class Recordatorios
     public int Habito { get; set; }
     public string? HoraEjecucion { get; set; }
     public string? Mensaje { get; set; }
-    public bool Activo { get; set; }
+
+    public int? Estado { get; set; }
 
     [ForeignKey("Habito")]
     public Habitos? _Habito { get; set; }

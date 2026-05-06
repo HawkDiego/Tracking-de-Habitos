@@ -10,6 +10,7 @@ public class Rachas
     public int? MaximaHistorica { get; set; }
     public DateTime? FechaUltimoIncremento { get; set; }
     public decimal? MultiplicadorXp { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Habito")]
     public Habitos? _Habito { get; set; }

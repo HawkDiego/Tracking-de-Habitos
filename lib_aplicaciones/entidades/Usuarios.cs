@@ -12,6 +12,7 @@ public class Usuarios
     public int? xpTotal { get; set; }
     public int? Nivel { get; set; }
     public int? Configuracion { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Nivel")]
     public Niveles? _Nivel { get; set; }

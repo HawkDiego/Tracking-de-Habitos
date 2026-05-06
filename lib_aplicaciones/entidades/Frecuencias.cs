@@ -9,6 +9,7 @@ public class Frecuencias
     public string? DiasSemana     { get; set; }
     public int?   VecesPorDia    { get; set; }
     public bool   esPersonalizada { get; set; }
+    public int?   Estado          { get; set; }
 
     [NotMapped]
     public List<Habitos>? Habitos { get; set; }

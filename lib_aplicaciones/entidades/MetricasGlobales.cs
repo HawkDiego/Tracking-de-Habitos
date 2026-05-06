@@ -10,6 +10,7 @@ public class MetricasGlobales
     public int HabitoMasPopular { get; set; }
     public int CategoriaMasUsada { get; set; }
     public DateTime FechaCalculo { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("HabitoMasPopular")]
     public HabitosPlantilla? _HabitoMasPopular { get; set; }
