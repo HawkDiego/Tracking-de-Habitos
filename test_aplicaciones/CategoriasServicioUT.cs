@@ -37,7 +37,7 @@ public sealed class CategoriasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var categoria = new Categorias { Nombre = "Test2", Descripcion = "Categoria de prueba", Color = "#000000", Icono = "🔧" };
+        var categoria = new Categorias { Nombre = "Test2", Descripcion = "Categoria de prueba", Color = "#000000", Icono = "🔧", Estado = 1 };
         bool resultado = _servicio.Insertar(categoria);
         if (resultado) return;
         throw new Exception("No se pudo insertar la categoria");

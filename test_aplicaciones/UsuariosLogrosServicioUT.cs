@@ -37,7 +37,7 @@ public sealed class UsuariosLogrosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var usuarioLogro = new UsuariosLogros { Usuario = 1, Logro = 1, FechaObtencion = DateTime.Today };
+        var usuarioLogro = new UsuariosLogros { Usuario = 1, Logro = 1, FechaObtencion = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(usuarioLogro);
         if (resultado) return;
         throw new Exception("No se pudo insertar el usuario logro");

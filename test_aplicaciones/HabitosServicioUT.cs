@@ -37,7 +37,7 @@ public sealed class HabitosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var habito = new Habitos { Usuario = 1, Nombre = "Habito Test", Descripcion = "Descripcion de prueba", FechaCreacion = DateTime.Today, Activo = true, XpOtorgada = 15, Categoria = 1, Frecuencia = 1 };
+        var habito = new Habitos { Usuario = 1, Nombre = "Habito Test", Descripcion = "Descripcion de prueba", FechaCreacion = DateTime.Today, XpOtorgada = 15, Categoria = 1, Frecuencia = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(habito);
         if (resultado) return;
         throw new Exception("No se pudo insertar el habito");

@@ -37,7 +37,7 @@ public sealed class NotasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var nota = new Notas { Texto = "Nota de prueba", FechaCreacion = DateTime.Today, EstadoDeAnimoEmoji = "😀", EsPrivada = true, RegistroProgreso = 1 };
+        var nota = new Notas { Texto = "Nota de prueba", FechaCreacion = DateTime.Today, EstadoDeAnimoEmoji = "😀", EsPrivada = true, RegistroProgreso = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(nota);
         if (resultado) return;
         throw new Exception("No se pudo insertar la nota");

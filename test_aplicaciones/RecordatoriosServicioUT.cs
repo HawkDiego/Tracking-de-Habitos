@@ -37,7 +37,7 @@ public sealed class RecordatoriosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var recordatorio = new Recordatorios { Habito = 1, HoraEjecucion = "07:00", Mensaje = "Recordatorio de prueba", Activo = true };
+        var recordatorio = new Recordatorios { Habito = 1, HoraEjecucion = "07:00", Mensaje = "Recordatorio de prueba", Estado = 1 };
         bool resultado = _servicio.Insertar(recordatorio);
         if (resultado) return;
         throw new Exception("No se pudo insertar el recordatorio");

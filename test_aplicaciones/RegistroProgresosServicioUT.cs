@@ -37,7 +37,7 @@ public sealed class RegistroProgresosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var registro = new RegistroProgresos { Habito = 1, FechaLogro = DateTime.Today, Completado = true, XpGanada = 20 };
+        var registro = new RegistroProgresos { Habito = 1, FechaLogro = DateTime.Today, Completado = true, XpGanada = 20, Estado = 1 };
         bool resultado = _servicio.Insertar(registro);
         if (resultado) return;
         throw new Exception("No se pudo insertar el registro de progreso");

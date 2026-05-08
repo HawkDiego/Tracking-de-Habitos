@@ -37,7 +37,7 @@ public sealed class ParticipacionDesafiosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var participacion = new ParticipacionDesafios { Desafio = 1, UsuariosGrupo = 1, ProgresoActual = 50.0m, RankingPosicion = 1 };
+        var participacion = new ParticipacionDesafios { Desafio = 1, UsuariosGrupo = 1, ProgresoActual = 50.0m, RankingPosicion = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(participacion);
         if (resultado) return;
         throw new Exception("No se pudo insertar la participacion en desafio");

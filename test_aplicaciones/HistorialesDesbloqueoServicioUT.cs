@@ -37,7 +37,7 @@ public sealed class HistorialesDesbloqueoServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var historial = new HistorialesDesbloqueo { Usuario = 1, Recompensa = 1, FechaObtencion = DateTime.Today };
+        var historial = new HistorialesDesbloqueo { Usuario = 1, Recompensa = 1, FechaObtencion = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(historial);
         if (resultado) return;
         throw new Exception("No se pudo insertar el historial de desbloqueo");

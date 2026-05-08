@@ -37,7 +37,7 @@ public sealed class GruposServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var grupo = new Grupos { Nombre = "Grupo Test", Descripcion = "Descripcion de prueba", Administrador = 1 };
+        var grupo = new Grupos { Nombre = "Grupo Test", Descripcion = "Descripcion de prueba", Administrador = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(grupo);
         if (resultado) return;
         throw new Exception("No se pudo insertar el grupo");

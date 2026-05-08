@@ -37,7 +37,7 @@ public sealed class DesafiosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var desafio = new Desafios { GrupoAdministrador = 1, Nombre = "Desafio Test", Descripcion = "Descripcion de prueba", FechaInicio = DateTime.Today, FechaFin = DateTime.Today.AddDays(7), XpBono = 50 };
+        var desafio = new Desafios { GrupoAdministrador = 1, Nombre = "Desafio Test", Descripcion = "Descripcion de prueba", FechaInicio = DateTime.Today, FechaFin = DateTime.Today.AddDays(7), XpBono = 50, Estado = 1 };
         bool resultado = _servicio.Insertar(desafio);
         if (resultado) return;
         throw new Exception("No se pudo insertar el desafio");

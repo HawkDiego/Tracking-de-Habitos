@@ -37,7 +37,7 @@ public sealed class RecompensasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var recompensa = new Recompensas { Nombre = "Recompensa Test", Descripcion = "Descripcion de prueba", NivelRequerido = 1, EsEstetica = true };
+        var recompensa = new Recompensas { Nombre = "Recompensa Test", Descripcion = "Descripcion de prueba", NivelRequerido = 1, EsEstetica = true, Estado = 1 };
         bool resultado = _servicio.Insertar(recompensa);
         if (resultado) return;
         throw new Exception("No se pudo insertar la recompensa");

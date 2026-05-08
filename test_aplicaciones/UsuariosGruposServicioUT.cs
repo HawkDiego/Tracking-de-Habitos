@@ -37,7 +37,7 @@ public sealed class UsuariosGruposServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var usuarioGrupo = new UsuariosGrupos { Grupo = 1, Usuario = 2, Rol = "miembro", FechaUnion = DateTime.Today };
+        var usuarioGrupo = new UsuariosGrupos { Grupo = 1, Usuario = 2, Rol = "miembro", FechaUnion = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(usuarioGrupo);
         if (resultado) return;
         throw new Exception("No se pudo insertar el usuario grupo");

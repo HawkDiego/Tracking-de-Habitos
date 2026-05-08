@@ -37,7 +37,7 @@ public sealed class FrecuenciasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var frecuencia = new Frecuencias { TipoIntervalo = "diario", DiasSemana = null, VecesPorDia = 1, esPersonalizada = false };
+        var frecuencia = new Frecuencias { TipoIntervalo = "diario", DiasSemana = null, VecesPorDia = 1, esPersonalizada = false, Estado = 1 };
         bool resultado = _servicio.Insertar(frecuencia);
         if (resultado) return;
         throw new Exception("No se pudo insertar la frecuencia");

@@ -37,7 +37,7 @@ public sealed class NivelesServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var nivel = new Niveles { Nombre = "Test", LimiteInferiorXp = 500, LimiteSuperiorXp = 599, Descripcion = "Nivel de prueba" };
+        var nivel = new Niveles { Nombre = "Test", LimiteInferiorXp = 500, LimiteSuperiorXp = 599, Descripcion = "Nivel de prueba", Estado = 1 };
         bool resultado = _servicio.Insertar(nivel);
         if (resultado) return;
         throw new Exception("No se pudo insertar el nivel");

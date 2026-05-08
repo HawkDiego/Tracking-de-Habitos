@@ -37,7 +37,7 @@ public sealed class LogrosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var logro = new Logros { Titulo = "Logro Test", DescripcionRequisito = "Requisito de prueba", XpOtorgada = 10 };
+        var logro = new Logros { Titulo = "Logro Test", DescripcionRequisito = "Requisito de prueba", XpOtorgada = 10, Estado = 1 };
         bool resultado = _servicio.Insertar(logro);
         if (resultado) return;
         throw new Exception("No se pudo insertar el logro");

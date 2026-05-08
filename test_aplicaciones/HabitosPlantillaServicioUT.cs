@@ -37,7 +37,7 @@ public sealed class HabitosPlantillaServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var plantilla = new HabitosPlantilla { Nombre = "Plantilla Test", Descripcion = "Descripcion de prueba", FechaCreacion = DateTime.Today, Activo = true, XpOtorgada = 10, Categoria = 1, EsOficial = false };
+        var plantilla = new HabitosPlantilla { Nombre = "Plantilla Test", Descripcion = "Descripcion de prueba", FechaCreacion = DateTime.Today, XpOtorgada = 10, Categoria = 1, EsOficial = false, Estado = 1 };
         bool resultado = _servicio.Insertar(plantilla);
         if (resultado) return;
         throw new Exception("No se pudo insertar el habito plantilla");
