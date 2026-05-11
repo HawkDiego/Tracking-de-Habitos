@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class UsuariosGrupos
+public class UsuariosGrupos : IEntidad
 {
     public int Id { get; set; }
     public int Grupo { get; set; }

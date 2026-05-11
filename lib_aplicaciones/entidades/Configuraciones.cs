@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class Configuraciones
+public class Configuraciones : IEntidad
 {
     public int Id { get; set; }
     public string? Tema { get; set; }

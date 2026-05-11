@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class Logros
+public class Logros : IEntidad
 {
     public int     Id                   { get; set; }
     public string? Titulo               { get; set; }

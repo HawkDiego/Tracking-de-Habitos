@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class ParticipacionDesafios
+public class ParticipacionDesafios : IEntidad
 {
     public int Id { get; set; }
     public int Desafio { get; set; }

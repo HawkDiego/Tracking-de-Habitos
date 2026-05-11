@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class Recordatorios
+public class Recordatorios : IEntidad
 {
     public int Id { get; set; }
     public int Habito { get; set; }

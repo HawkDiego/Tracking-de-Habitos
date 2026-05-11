@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class MetricasGlobales
+public class MetricasGlobales : IEntidad
 {
     public int Id { get; set; }
     public int TotalUsuariosActivos { get; set; }
