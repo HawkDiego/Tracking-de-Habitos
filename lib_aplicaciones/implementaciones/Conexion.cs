@@ -8,7 +8,7 @@ public class Conexion: DbContext, IConexion
 {
     public string? StringConexion { get; set; }
 
-    public Conexion() => StringConexion = ConfiguracionBD.StringConexion;
+    public Conexion() => StringConexion = lib_aplicaciones.nucleo.Configuraciones.obtener("BD");
     public Conexion(string cadena) => StringConexion = cadena;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

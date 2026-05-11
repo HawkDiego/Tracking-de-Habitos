@@ -1,4 +1,4 @@
-namespace app_library.nucleo;
+namespace lib_aplicaciones.nucleo;
 
 public class Configuraciones
 {
