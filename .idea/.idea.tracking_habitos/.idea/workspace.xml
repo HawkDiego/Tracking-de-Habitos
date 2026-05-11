@@ -11,7 +11,75 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bab1a381-efef-4799-87c0-e9a506b3888f" name="Changes" comment="" />
+    <list default="true" id="bab1a381-efef-4799-87c0-e9a506b3888f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.tracking_habitos/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tracking_habitos/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.tracking_habitos/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tracking_habitos/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/cns_presentacion.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/cns_presentacion.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/cns_presentacion.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/cns_presentacion.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/lib_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/bin/Debug/net10.0/lib_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/cns_presentacion.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/ref/cns_presentacion.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/ref/cns_presentacion.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/refint/cns_presentacion.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/Debug/net10.0/refint/cns_presentacion.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cns_presentacion/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/cns_presentacion/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/implementaciones/Servicio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/implementaciones/Servicio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/ref/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/ref/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/refint/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/refint/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_aplicaciones/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/lib_aplicaciones/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/Debug/net10.0/servicios_aplicaciones.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/servicios_aplicaciones.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/servicios_aplicaciones.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/obj/servicios_aplicaciones.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/obj/servicios_aplicaciones.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicios_aplicaciones/servicios_aplicaciones.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/servicios_aplicaciones/servicios_aplicaciones.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/.msCoverageExtensionSourceRootsMapping_test_aplicaciones" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/.msCoverageExtensionSourceRootsMapping_test_aplicaciones" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/.msCoverageSourceRootsMapping_test_aplicaciones" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/.msCoverageSourceRootsMapping_test_aplicaciones" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/lib_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/test_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/test_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/test_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/bin/Debug/net10.0/test_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/ref/test_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/ref/test_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/refint/test_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/refint/test_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.dll" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/Debug/net10.0/test_aplicaciones.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_aplicaciones/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/test_aplicaciones/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tracking_habitos.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/tracking_habitos.sln.DotSettings.user" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +103,11 @@
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/insomnia_tracking_habitos.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/entidades/Categorias.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/entidades/Configuraciones.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/entidades/Niveles.cs" root0="FORCE_HIGHLIGHTING" />
@@ -44,6 +116,7 @@
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/implementaciones/Conexion.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/interfaces/IConexion.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib_aplicaciones/nucleo/Configuraciones.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib_aplicaciones/obj/Debug/net10.0/lib_aplicaciones.sourcelink.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/85909119e12d488ca3a35e218a2fa37217ca90/df/84ce67d3/SqlConnectionFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/413341ec7da6e42cb630e52ba9208edacb2e7267da1d9296f51628fcd35e81d9/SingleQueryingEnumerable.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -51,6 +124,7 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -68,7 +142,9 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "develop",
     "last_opened_file_path": "/Users/diegogiraldo/Desktop/Practica2/tracking_habitos",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -78,19 +154,6 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunDashboard">
-    <option name="configurationStatuses">
-      <map>
-        <entry key="HttpClient.HttpRequestRunConfigurationType">
-          <value>
-            <map>
-              <entry key="WebApplication1 | #1" value="STOPPED" />
-            </map>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="RunManager" selected=".NET Project.cns_presentacion">
     <configuration name="cns_presentacion" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -225,12 +288,79 @@
       <workItem from="1776342261181" duration="138000" />
       <workItem from="1776945743165" duration="82000" />
       <workItem from="1776950798296" duration="1196000" />
+      <workItem from="1778248448806" duration="8342000" />
     </task>
+    <task id="LOCAL-00001" summary="Nueva logica de eliminacion con estados">
+      <option name="closed" value="true" />
+      <created>1778069276395</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1778069276395</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Logica de estados en las tablas">
+      <option name="closed" value="true" />
+      <created>1778069315410</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1778069315410</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix logica de estados faltante en una entidad">
+      <option name="closed" value="true" />
+      <created>1778070123000</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1778070123000</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Inserts con estados en toda la base de datos">
+      <option name="closed" value="true" />
+      <created>1778072293334</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1778072293334</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Test con CRUD">
+      <option name="closed" value="true" />
+      <created>1778248663408</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1778248663408</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Ajuste a los unit test con la nueva logica de optencion de la url de la base de datos">
+      <option name="closed" value="true" />
+      <created>1778529075390</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1778529075390</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Tipo generico en IConexion y mejor manejo de la url de la base de datos en Conexion">
+      <option name="closed" value="true" />
+      <created>1778529384273</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1778529384273</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Generico en las entidades para que el generico entienda que se necesita id y estado para los servicios basicos">
+      <option name="closed" value="true" />
+      <created>1778529998947</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1778529998947</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnknownFeatures">
     <option featureType="dependencySupport" implementationName="executable:docker" />
@@ -242,6 +372,15 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Nueva logica de eliminacion con estados" />
+    <MESSAGE value="Logica de estados en las tablas" />
+    <MESSAGE value="Fix logica de estados faltante en una entidad" />
+    <MESSAGE value="Inserts con estados en toda la base de datos" />
+    <MESSAGE value="Test con CRUD" />
+    <MESSAGE value="Ajuste a los unit test con la nueva logica de optencion de la url de la base de datos" />
+    <MESSAGE value="Tipo generico en IConexion y mejor manejo de la url de la base de datos en Conexion" />
+    <MESSAGE value="Generico en las entidades para que el generico entienda que se necesita id y estado para los servicios basicos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Generico en las entidades para que el generico entienda que se necesita id y estado para los servicios basicos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

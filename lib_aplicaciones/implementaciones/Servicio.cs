@@ -3,33 +3,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lib_aplicaciones.implementaciones;
 
-public class Servicio<T> : IServicio<T> where T : class
+public abstract class ServicioBase<T> : IServicio<T> where T : class, IEntidad
 {
-    private readonly IConexion _conexion;
-    private readonly DbSet<T> _dbSet;
+    protected readonly IConexion _conexion;
+    protected DbSet<T> Set => _conexion.Set<T>();
 
-    public Servicio(IConexion conexion, DbSet<T> dbSet)
+    protected ServicioBase(IConexion conexion) => _conexion = conexion;
+
+    public virtual List<T> Listar()
+        => Set.Where(e => e.Estado != 99).ToList();
+
+    public virtual T? ObtenerPorId(int id)
     {
-        _conexion = conexion;
-        _dbSet = dbSet;
+        var e = Set.Find(id);
+        return e is null || e.Estado == 99 ? null : e;
     }
 
-    public List<T> Listar()
-        => _dbSet.ToList();
-
-    public T? ObtenerPorId(int id)
-        => _dbSet.Find(id);
-
-    public bool Insertar(T entidad)
+    public virtual bool Insertar(T entidad)
     {
-        _dbSet.Add(entidad);
+        Set.Add(entidad);
         return _conexion.SaveChanges() > 0;
     }
 
-    public bool Actualizar(T entidad)
+    public virtual bool Actualizar(T entidad)
     {
-        _dbSet.Update(entidad);
+        Set.Update(entidad);
         return _conexion.SaveChanges() > 0;
     }
 
+    public virtual bool Eliminar(int id)
+    {
+        var e = Set.Find(id);
+        if (e is null || e.Estado == 99) return false;
+        e.Estado = 99;
+        Set.Update(e);
+        return _conexion.SaveChanges() > 0;
+    }
 }

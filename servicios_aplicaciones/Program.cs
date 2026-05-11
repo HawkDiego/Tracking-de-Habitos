@@ -1,23 +1,45 @@
+using lib_aplicaciones.implementaciones;
+using lib_aplicaciones.interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IConexion>(_ => new Conexion
+{
+    StringConexion = builder.Configuration.GetConnectionString("Sql")
+});
+
+builder.Services.AddScoped<INivelesServicio, NivelesServicio>();
+builder.Services.AddScoped<ICategoriasServicio, CategoriasServicio>();
+builder.Services.AddScoped<IFrecuenciasServicio, FrecuenciasServicio>();
+builder.Services.AddScoped<ILogrosServicio, LogrosServicio>();
+builder.Services.AddScoped<IConfiguracionesServicio, ConfiguracionesServicio>();
+builder.Services.AddScoped<IRecompensasServicio, RecompensasServicio>();
+builder.Services.AddScoped<IUsuariosServicio, UsuariosServicio>();
+builder.Services.AddScoped<IHabitosPlantillaServicio, HabitosPlantillaServicio>();
+builder.Services.AddScoped<IHabitosServicio, HabitosServicio>();
+builder.Services.AddScoped<IGruposServicio, GruposServicio>();
+builder.Services.AddScoped<IUsuariosLogrosServicio, UsuariosLogrosServicio>();
+builder.Services.AddScoped<IRegistroProgresosServicio, RegistroProgresosServicio>();
+builder.Services.AddScoped<IRecordatoriosServicio, RecordatoriosServicio>();
+builder.Services.AddScoped<IRachasServicio, RachasServicio>();
+builder.Services.AddScoped<IHistorialesDesbloqueoServicio, HistorialesDesbloqueoServicio>();
+builder.Services.AddScoped<IEstadisticasUsuariosServicio, EstadisticasUsuariosServicio>();
+builder.Services.AddScoped<IMetricasGlobalesServicio, MetricasGlobalesServicio>();
+builder.Services.AddScoped<IUsuariosGruposServicio, UsuariosGruposServicio>();
+builder.Services.AddScoped<IDesafiosServicio, DesafiosServicio>();
+builder.Services.AddScoped<INotasServicio, NotasServicio>();
+builder.Services.AddScoped<IParticipacionDesafiosServicio, ParticipacionDesafiosServicio>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

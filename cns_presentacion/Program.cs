@@ -5,27 +5,27 @@ using lib_aplicaciones.interfaces;
 var conexion = new Conexion();
 conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
 
-IServicio<Niveles>          nivelesServicio          = new Servicio<Niveles>(conexion, conexion.Niveles!);
-IServicio<Categorias>       categoriasServicio       = new Servicio<Categorias>(conexion, conexion.Categorias!);
-IServicio<Frecuencias>      frecuenciasServicio      = new Servicio<Frecuencias>(conexion, conexion.Frecuencias!);
-IServicio<Logros>           logrosServicio           = new Servicio<Logros>(conexion, conexion.Logros!);
-IServicio<Configuraciones>  configuracionesServicio  = new Servicio<Configuraciones>(conexion, conexion.Configuraciones!);
-IServicio<Recompensas>      recompensasServicio      = new Servicio<Recompensas>(conexion, conexion.Recompensas!);
-IServicio<Usuarios>         usuariosServicio         = new Servicio<Usuarios>(conexion, conexion.Usuarios!);
-IServicio<HabitosPlantilla> habitosPlantillaServicio = new Servicio<HabitosPlantilla>(conexion, conexion.HabitosPlantilla!);
-IServicio<Habitos>          habitosServicio          = new Servicio<Habitos>(conexion, conexion.Habitos!);
-IServicio<Grupos>           gruposServicio           = new Servicio<Grupos>(conexion, conexion.Grupos!);
-IServicio<UsuariosLogros>          usuariosLogrosServicio          = new Servicio<UsuariosLogros>(conexion, conexion.UsuariosLogros!);
-IServicio<RegistroProgresos>       registroProgresosServicio       = new Servicio<RegistroProgresos>(conexion, conexion.RegistroProgresos!);
-IServicio<Recordatorios>           recordatoriosServicio           = new Servicio<Recordatorios>(conexion, conexion.Recordatorios!);
-IServicio<Rachas>                  rachasServicio                  = new Servicio<Rachas>(conexion, conexion.Rachas!);
-IServicio<HistorialesDesbloqueo>   historialesDesbloqueoServicio   = new Servicio<HistorialesDesbloqueo>(conexion, conexion.HistorialesDesbloqueo!);
-IServicio<EstadisticasUsuarios>    estadisticasUsuariosServicio    = new Servicio<EstadisticasUsuarios>(conexion, conexion.EstadisticasUsuarios!);
-IServicio<MetricasGlobales>        metricasGlobalesServicio        = new Servicio<MetricasGlobales>(conexion, conexion.MetricasGlobales!);
-IServicio<UsuariosGrupos>          usuariosGruposServicio          = new Servicio<UsuariosGrupos>(conexion, conexion.UsuariosGrupos!);
-IServicio<Desafios>                desafiosServicio                = new Servicio<Desafios>(conexion, conexion.Desafios!);
-IServicio<Notas>                   notasServicio                   = new Servicio<Notas>(conexion, conexion.Notas!);
-IServicio<ParticipacionDesafios>   participacionDesafiosServicio   = new Servicio<ParticipacionDesafios>(conexion, conexion.ParticipacionDesafios!);
+IServicio<Niveles>          nivelesServicio          = new NivelesServicio(conexion);
+IServicio<Categorias>       categoriasServicio       = new CategoriasServicio(conexion);
+IServicio<Frecuencias>      frecuenciasServicio      = new FrecuenciasServicio(conexion);
+IServicio<Logros>           logrosServicio           = new LogrosServicio(conexion);
+IServicio<Configuraciones>  configuracionesServicio  = new ConfiguracionesServicio(conexion);
+IServicio<Recompensas>      recompensasServicio      = new RecompensasServicio(conexion);
+IServicio<Usuarios>         usuariosServicio         = new UsuariosServicio(conexion);
+IServicio<HabitosPlantilla> habitosPlantillaServicio = new HabitosPlantillaServicio(conexion);
+IServicio<Habitos>          habitosServicio          = new HabitosServicio(conexion);
+IServicio<Grupos>           gruposServicio           = new GruposServicio(conexion);
+IServicio<UsuariosLogros>          usuariosLogrosServicio          = new UsuariosLogrosServicio(conexion);
+IServicio<RegistroProgresos>       registroProgresosServicio       = new RegistroProgresosServicio(conexion);
+IServicio<Recordatorios>           recordatoriosServicio           = new RecordatoriosServicio(conexion);
+IServicio<Rachas>                  rachasServicio                  = new RachasServicio(conexion);
+IServicio<HistorialesDesbloqueo>   historialesDesbloqueoServicio   = new HistorialesDesbloqueoServicio(conexion);
+IServicio<EstadisticasUsuarios>    estadisticasUsuariosServicio    = new EstadisticasUsuariosServicio(conexion);
+IServicio<MetricasGlobales>        metricasGlobalesServicio        = new MetricasGlobalesServicio(conexion);
+IServicio<UsuariosGrupos>          usuariosGruposServicio          = new UsuariosGruposServicio(conexion);
+IServicio<Desafios>                desafiosServicio                = new DesafiosServicio(conexion);
+IServicio<Notas>                   notasServicio                   = new NotasServicio(conexion);
+IServicio<ParticipacionDesafios>   participacionDesafiosServicio   = new ParticipacionDesafiosServicio(conexion);
 
 Console.WriteLine("=== NIVELES ===");
 foreach (var n in nivelesServicio.Listar())
@@ -77,7 +77,7 @@ foreach (var rp in registroProgresosServicio.Listar())
 
 Console.WriteLine("\n=== RECORDATORIOS ===");
 foreach (var r in recordatoriosServicio.Listar())
-    Console.WriteLine($"  [{r.Id}] Hábito: {r.Habito} | Hora: {r.HoraEjecucion} | Activo: {r.Activo}");
+    Console.WriteLine($"  [{r.Id}] Hábito: {r.Habito} | Hora: {r.HoraEjecucion} | Estado: {r.Estado}");
 
 Console.WriteLine("\n=== RACHAS ===");
 foreach (var r in rachasServicio.Listar())

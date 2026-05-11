@@ -27,27 +27,66 @@ dotnet test test_aplicaciones --filter "FullyQualifiedName~NivelesServicioUT.Lis
 
 ## Base de datos
 
-SQL Server en `localhost:1433` (sa / TuPassword123!). El esquema está definido en `tracking_habitos.sql`. Tablas: Niveles, Categorias, Frecuencias, Logros, Configuraciones, Recompensas. Las pruebas se conectan a esta misma base de datos (pruebas de integración, sin mocks).
+SQL Server en `localhost:1433` (sa / TuPassword123!). Esquema definido en `tracking_habitos.sql`. 21 tablas. Las pruebas se conectan a esta misma BD (pruebas de integración, sin mocks). Cadena de conexión centralizada en `lib_aplicaciones/implementaciones/ConfiguracionBD.cs`.
 
 ## Arquitectura
 
-Solución de tres proyectos con patrón por capas:
+Solución de cuatro proyectos con patrón por capas:
 
-- **lib_aplicaciones** — Biblioteca de clases. Capa central que contiene:
-  - `entidades/` — Clases de entidad EF Core mapeadas a las tablas SQL (ej. `Niveles`, `Categorias`, `Recompensas`)
-  - `interfaces/` — Contratos de servicios (`I{Entidad}Servicio`) y contrato del contexto de BD (`IConexion`)
-  - `implementaciones/` — Implementaciones de servicios con operaciones CRUD (`Listar`, `ObtenerPorId`, `Insertar`, `Actualizar`, `Eliminar`) y `Conexion` (DbContext)
+- **lib_aplicaciones** — Biblioteca de clases. Núcleo:
+  - `entidades/` — Clases EF Core mapeadas a tablas SQL. Todas implementan `IEntidad` (`Id`, `Estado`).
+  - `interfaces/` — `IEntidad`, `IConexion`, `IServicio<T>` genérico, y 21 `I{Entidad}Servicio` (vacíos, extienden `IServicio<{Entidad}>`).
+  - `implementaciones/` — `Conexion` (DbContext + IConexion), `ConfiguracionBD` (string conexión central), `ServicioBase<T>` (CRUD genérico + soft delete), 21 `{Entidad}Servicio` slim (heredan `ServicioBase`).
 
-- **cns_presentacion** — Aplicación de consola. Punto de entrada (`Program.cs`) que instancia `Conexion`, conecta todos los servicios e imprime datos. Depende de lib_aplicaciones.
+- **servicios_aplicaciones** — Web API ASP.NET. 21 controllers REST (`/{Entidad}/{Accion}`). DI scoped de `IConexion` + 21 servicios. Connection string en `appsettings.json` (key `Sql`).
 
-- **test_aplicaciones** — Pruebas de integración con MSTest. Una clase de pruebas por servicio (`{Entidad}ServicioUT`). Se ejecutan en paralelo (`ExecutionScope.MethodLevel`). Cada clase crea su propia instancia de `Conexion` en `[TestInitialize]`.
+- **cns_presentacion** — Consola legacy. Será reemplazado por frontend React.
 
-- **referencia/** — Archivo de referencia (`monolito.cs`) con el modelo de datos completo y datos de demo. No se compila; se usa como guía para construir entidades y scripts SQL.
+- **test_aplicaciones** — Pruebas de integración MSTest. Una clase por servicio. Ejecutan en paralelo (`ExecutionScope.MethodLevel`). Init: `new Conexion()` toma string desde `ConfiguracionBD`.
+
+- **referencia/** — `monolito.cs` con modelo de datos completo. No compila; guía para entidades y SQL.
 
 ## Convenciones
 
-- Cada entidad de dominio tiene su interfaz (`I{Entidad}Servicio`), implementación (`{Entidad}Servicio`) y clase de pruebas (`{Entidad}ServicioUT`)
-- Todas las interfaces de servicio exponen los mismos 5 métodos CRUD: `Listar`, `ObtenerPorId`, `Insertar`, `Actualizar`, `Eliminar`
-- `Conexion` implementa tanto `DbContext` como `IConexion`; usa `NoTracking` por defecto
-- La cadena de conexión está hardcodeada en `Program.cs` y en el `TestInitialize` de cada prueba
-- Las propiedades de navegación FK usan el atributo `[ForeignKey]`; algunas están marcadas como `[NotMapped]` (ej. `Niveles.Recompensas`)
+- Cada entidad: interfaz `I{Entidad}Servicio` (vacía, extiende `IServicio<{Entidad}>`), implementación `{Entidad}Servicio : ServicioBase<{Entidad}>`, pruebas `{Entidad}ServicioUT`, controller `{Entidad}Controller`.
+- CRUD genérico vive en `ServicioBase<T>` — `Listar`, `ObtenerPorId`, `Insertar`, `Actualizar`, `Eliminar` con soft delete (`Estado = 99`). Métodos `virtual` para override.
+- Implementaciones slim quedan vacías hasta que aparezca lógica específica. Punto de extensión: agregar método nuevo o `override` para validación/auditoría/reglas.
+- `Conexion` implementa `DbContext` + `IConexion`. `NoTracking` por defecto. Ctor parameterless usa `ConfiguracionBD.StringConexion`; ctor `(string cadena)` para overrides puntuales.
+- FK navegación con `[ForeignKey]`; colecciones inversas marcadas `[NotMapped]`.
+- API Insomnia: export en `insomnia_tracking_habitos.json` (raíz). 21 carpetas, 105 requests. Variable `base_url`.
+
+## Lógica futura prevista por entidad
+
+Casos donde llenar cuerpo de servicios:
+
+| Entidad | Lógica probable |
+|---|---|
+| Usuarios | hash clave (BCrypt), validar email único, login, recuperar password |
+| Habitos | validar pertenencia usuario, recalcular XP, filtrar por usuario activo |
+| RegistroProgresos | cascada: actualizar Racha + xpTotal usuario + EstadisticasUsuarios al insertar |
+| Desafios | validar fechas (Fin > Inicio), recalcular ranking, cerrar al vencer |
+| Rachas | reset `ConteoActual = 0` si pasó > 1 día sin registro; actualizar `MaximaHistorica` |
+| EstadisticasUsuarios | agregaciones mensuales automáticas, no permitir duplicado (Usuario, Mes, Año) |
+| Notas | validar dueño del `RegistroProgreso`, respetar `EsPrivada` en queries |
+| Grupos | validar admin existe y está activo; cascada al desactivar |
+| UsuariosGrupos | validar no duplicar (Usuario, Grupo); roles permitidos |
+| ParticipacionDesafios | recalcular `RankingPosicion` al cambiar `ProgresoActual` |
+| HistorialesDesbloqueo | validar nivel suficiente antes de desbloquear |
+| UsuariosLogros | otorgar XP automático al insertar; validar requisito cumplido |
+| Recordatorios | validar formato hora; cron/scheduler externo |
+| MetricasGlobales | job programado nocturno; cálculos agregados |
+
+Catálogos puros (probablemente sin lógica adicional): **Niveles, Categorias, Frecuencias, Logros, Configuraciones, Recompensas, HabitosPlantilla**.
+
+## Auditoría (planeado)
+
+Todas las tablas tendrán auditoría para trazabilidad de acciones de usuario, inserts/updates/deletes y logs de sistema.
+
+**Diseño previsto**:
+- Tabla `Auditorias` global con columnas: `Id`, `Tabla` (string), `RegistroId` (int), `Accion` (Insert/Update/Delete/Login/...), `Usuario` (FK Usuarios), `FechaAccion`, `ValoresAnteriores` (JSON/nvarchar(max)), `ValoresNuevos` (JSON), `IP`, `Estado`.
+- Implementación centralizada en `ServicioBase<T>`: override `Insertar`/`Actualizar`/`Eliminar` para registrar entrada de auditoría antes de `SaveChanges`. Captura `Usuario` actual desde contexto de request (claim JWT o header).
+- Alternativa EF Core: interceptor (`SaveChangesInterceptor`) que detecta cambios en `ChangeTracker` y los persiste automático sin tocar cada servicio. Preferible — desacopla auditoría de lógica de negocio.
+- Tabla aparte `LogsSistema` para errores/eventos no ligados a entidad (login fallido, excepciones, jobs).
+- Agregar a todas las entidades: `FechaCreacion`, `FechaModificacion`, `UsuarioCreador`, `UsuarioModificador` (o mantenerlas solo en `Auditorias` para no inflar tablas — decidir cuando se implemente).
+
+**Cuando se implemente**: requiere primero auth (JWT) para identificar usuario; sin auth la columna `Usuario` queda nula y la auditoría pierde valor.
