@@ -14,8 +14,7 @@ public sealed class HistorialesDesbloqueoServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<HistorialesDesbloqueo>(_conexion, _conexion.HistorialesDesbloqueo!);
+        _servicio = new HistorialesDesbloqueoServicio(_conexion);
     }
 
     [TestMethod]

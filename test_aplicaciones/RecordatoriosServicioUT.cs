@@ -14,8 +14,7 @@ public sealed class RecordatoriosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Recordatorios>(_conexion, _conexion.Recordatorios!);
+        _servicio = new RecordatoriosServicio(_conexion);
     }
 
     [TestMethod]

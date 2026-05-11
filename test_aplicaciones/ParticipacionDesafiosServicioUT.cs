@@ -14,8 +14,7 @@ public sealed class ParticipacionDesafiosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<ParticipacionDesafios>(_conexion, _conexion.ParticipacionDesafios!);
+        _servicio = new ParticipacionDesafiosServicio(_conexion);
     }
 
     [TestMethod]

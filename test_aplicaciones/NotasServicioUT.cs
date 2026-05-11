@@ -14,8 +14,7 @@ public sealed class NotasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Notas>(_conexion, _conexion.Notas!);
+        _servicio = new NotasServicio(_conexion);
     }
 
     [TestMethod]

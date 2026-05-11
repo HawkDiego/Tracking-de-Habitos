@@ -14,8 +14,7 @@ public sealed class NivelesServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Niveles>(_conexion, _conexion.Niveles!);
+        _servicio = new NivelesServicio(_conexion);
     }
 
     [TestMethod]

@@ -14,8 +14,7 @@ public sealed class MetricasGlobalesServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<MetricasGlobales>(_conexion, _conexion.MetricasGlobales!);
+        _servicio = new MetricasGlobalesServicio(_conexion);
     }
 
     [TestMethod]

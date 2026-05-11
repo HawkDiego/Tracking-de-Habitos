@@ -14,8 +14,7 @@ public sealed class HabitosPlantillaServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<HabitosPlantilla>(_conexion, _conexion.HabitosPlantilla!);
+        _servicio = new HabitosPlantillaServicio(_conexion);
     }
 
     [TestMethod]

@@ -14,8 +14,7 @@ public sealed class RecompensasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Recompensas>(_conexion, _conexion.Recompensas!);
+        _servicio = new RecompensasServicio(_conexion);
     }
 
     [TestMethod]
