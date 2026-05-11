@@ -31,6 +31,7 @@ public interface IConexion
         DbSet<ParticipacionDesafios>? ParticipacionDesafios { get; set; }
 
         EntityEntry<T> Entry<T>(T entity) where T : class;
-        
+        DbSet<T>       Set<T>() where T : class;
+
         int SaveChanges();
 }

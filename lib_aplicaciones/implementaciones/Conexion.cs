@@ -7,6 +7,10 @@ namespace lib_aplicaciones.implementaciones;
 public class Conexion: DbContext, IConexion
 {
     public string? StringConexion { get; set; }
+
+    public Conexion() => StringConexion = ConfiguracionBD.StringConexion;
+    public Conexion(string cadena) => StringConexion = cadena;
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(this.StringConexion!, p => { });
