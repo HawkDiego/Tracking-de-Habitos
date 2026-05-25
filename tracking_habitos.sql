@@ -149,11 +149,12 @@ CREATE TABLE [Usuarios] (
 
 INSERT INTO [Usuarios] ([Nombre], [Email], [Clave], [FechaRegistro], [xpTotal], [Nivel], [Configuracion], [Estado])
 VALUES
-    ('Ana Torres',    'ana.torres@habitapp.com',    'ClaveAna#2026',    '2025-09-22', 95,  1, 1, 1),
-    ('Carlos Ruiz',   'carlos.ruiz@habitapp.com',   'ClaveCarlos#2026', '2025-07-22', 178, 2, 2, 1),
-    ('Laura Gómez',   'laura.gomez@habitapp.com',   'ClaveLaura#2026',  '2025-11-22', 242, 3, 3, 1),
-    ('Diego Pardo',   'diego.pardo@habitapp.com',   'ClaveDiego#2026',  '2025-05-22', 336, 4, 4, 1),
-    ('Sofía Herrera', 'sofia.herrera@habitapp.com', 'ClaveSofia#2026',  '2025-03-22', 415, 5, 5, 1);
+    -- Clave se guarda como SHA256 hex lowercase (HASHBYTES). Mismo formato que C# (Hash.Sha256).
+    ('Ana Torres',    'ana.torres@habitapp.com',    LOWER(CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 'ClaveAna#2026'),    2)), '2025-09-22', 95,  1, 1, 1),
+    ('Carlos Ruiz',   'carlos.ruiz@habitapp.com',   LOWER(CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 'ClaveCarlos#2026'), 2)), '2025-07-22', 178, 2, 2, 1),
+    ('Laura Gómez',   'laura.gomez@habitapp.com',   LOWER(CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 'ClaveLaura#2026'),  2)), '2025-11-22', 242, 3, 3, 1),
+    ('Diego Pardo',   'diego.pardo@habitapp.com',   LOWER(CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 'ClaveDiego#2026'),  2)), '2025-05-22', 336, 4, 4, 1),
+    ('Sofía Herrera', 'sofia.herrera@habitapp.com', LOWER(CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 'ClaveSofia#2026'),  2)), '2025-03-22', 415, 5, 5, 1);
 
 SELECT * FROM Usuarios;
 

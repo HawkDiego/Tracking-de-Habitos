@@ -36,7 +36,7 @@ public sealed class UsuariosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var usuario = new Usuarios { Nombre = "Test User", Email = "test@habitapp.com", Clave = "ClaveTest#2026", FechaRegistro = DateTime.Today, xpTotal = 0, Nivel = 1, Configuracion = 1, Estado = 1 };
+        var usuario = new Usuarios { Nombre = "Test User", Email = $"test_{Guid.NewGuid():N}@habitapp.com", Clave = "ClaveTest#2026", FechaRegistro = DateTime.Today, xpTotal = 0, Nivel = 1, Configuracion = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(usuario);
         if (resultado) return;
         throw new Exception("No se pudo insertar el usuario");
