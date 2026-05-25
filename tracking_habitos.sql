@@ -484,3 +484,16 @@ VALUES
     (5, 5, 70.00, 2, 1);
 
 SELECT * FROM ParticipacionDesafios;
+
+CREATE TABLE [Auditorias] (
+    [Id]          INT            NOT NULL IDENTITY(1,1),
+    [Usuario]     INT            NOT NULL,
+    [Modulo]      NVARCHAR(100)  NOT NULL,
+    [Accion]      NVARCHAR(50)   NOT NULL,
+    [Endpoint]    NVARCHAR(300)  NOT NULL,
+    [Body]        NVARCHAR(MAX)      NULL,
+    [FechaAccion] DATETIME       NOT NULL,
+
+    CONSTRAINT PK_Auditorias          PRIMARY KEY ([Id]),
+    CONSTRAINT FK_Auditorias_Usuarios FOREIGN KEY ([Usuario]) REFERENCES [Usuarios]([Id])
+);

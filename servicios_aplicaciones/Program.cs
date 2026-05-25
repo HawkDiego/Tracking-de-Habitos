@@ -7,7 +7,8 @@ using servicios_aplicaciones.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<AuditoriaFilter>();
+builder.Services.AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>());
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<JwtHelper>();
 
@@ -55,6 +56,7 @@ builder.Services.AddScoped<IUsuariosGruposServicio, UsuariosGruposServicio>();
 builder.Services.AddScoped<IDesafiosServicio, DesafiosServicio>();
 builder.Services.AddScoped<INotasServicio, NotasServicio>();
 builder.Services.AddScoped<IParticipacionDesafiosServicio, ParticipacionDesafiosServicio>();
+builder.Services.AddScoped<IAuditoriasServicio, AuditoriasServicio>();
 
 var app = builder.Build();
 

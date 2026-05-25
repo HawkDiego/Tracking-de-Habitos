@@ -38,4 +38,5 @@ public class Conexion: DbContext, IConexion
     public DbSet<Desafios>? Desafios { get; set; }
     public DbSet<Notas>? Notas { get; set; }
     public DbSet<ParticipacionDesafios>? ParticipacionDesafios { get; set; }
+    public DbSet<Auditorias>? Auditorias { get; set; }
 }

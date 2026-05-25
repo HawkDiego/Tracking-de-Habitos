@@ -29,6 +29,7 @@ public interface IConexion
         DbSet<Desafios>?             Desafios             { get; set; }
         DbSet<Notas>?                Notas                { get; set; }
         DbSet<ParticipacionDesafios>? ParticipacionDesafios { get; set; }
+        DbSet<Auditorias>?            Auditorias            { get; set; }
 
         EntityEntry<T> Entry<T>(T entity) where T : class;
         DbSet<T>       Set<T>() where T : class;
