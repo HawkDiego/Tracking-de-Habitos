@@ -1,0 +1,51 @@
+﻿@page
+@model presentacion_web.Pages.LoginModel
+@{
+    ViewData["Title"] = "Iniciar Sesión - Tracking de Hábitos";
+    Layout = "_Layout"; // Asegura que use la plantilla general del sistema
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="card bg-dark text-white shadow-lg p-4" style="width: 100%; max-width: 420px; border-radius: 15px; border: 1px solid #343a40;">
+        <div class="card-body text-center">
+
+            <div class="mb-4">
+                <i class="fas fa-user-shield fa-3x text-info mb-3"></i>
+                <h3 class="fw-bold">Bienvenido</h3>
+                <p class="text-muted small">Ingrese sus credenciales para acceder al sistema</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.MensajeError))
+            {
+                <div class="alert alert-danger alert-dismissible fade show small text-start" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> @Model.MensajeError
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <form method="post" autocomplete="off">
+
+                <div class="form-floating mb-3 text-start text-dark">
+                    <input type="text" asp-for="Input.Usuario" class="form-control bg-secondary text-white border-0" id="floatingUser" placeholder="Usuario o Correo" required />
+                    <label asp-for="Input.Usuario" for="floatingUser" class="text-white-50">Usuario o Email</label>
+                    <span asp-validation-for="Input.Usuario" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="form-floating mb-4 text-start text-dark">
+                    <input type="password" asp-for="Input.Password" class="form-control bg-secondary text-white border-0" id="floatingPassword" placeholder="Contraseña" required />
+                    <label asp-for="Input.Password" for="floatingPassword" class="text-white-50">Contraseña</label>
+                    <span asp-validation-for="Input.Password" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <button type="submit" class="btn btn-info w-100 fw-bold py-2 text-uppercase shadow" style="border-radius: 8px;">
+                    <i class="fas fa-sign-in-alt me-2"></i> Ingresar
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
