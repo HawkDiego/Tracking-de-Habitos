@@ -1,10 +1,59 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard Principal";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info fw-bold">
+            <i class="fas fa-chart-line me-2"></i>Resumen de Actividad
+        </h2>
+        <span class="badge bg-secondary p-2 fs-6">
+            <i class="fas fa-calendar-day me-1"></i> @DateTime.Now.ToString("dd/MM/yyyy")
+        </span>
+    </div>
+
+    <hr class="border-secondary mb-4" />
+
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card bg-dark border-secondary shadow-sm" style="border-radius: 12px;">
+                <div class="card-body">
+                    <h6 class="card-title text-white-50 text-uppercase fw-bold">Hábitos Registrados</h6>
+                    <h2 class="text-success m-0"><i class="fas fa-check-circle me-2"></i>0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark border-secondary shadow-sm" style="border-radius: 12px;">
+                <div class="card-body">
+                    <h6 class="card-title text-white-50 text-uppercase fw-bold">Categorías Activas</h6>
+                    <h2 class="text-warning m-0"><i class="fas fa-tags me-2"></i>0</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-light mb-3"><i class="fas fa-history me-2 text-info"></i>Últimos Movimientos (Auditoría)</h4>
+    <div class="table-responsive shadow-sm" style="border-radius: 10px; border: 1px solid #343a40;">
+        <table class="table table-dark table-striped table-hover mb-0 align-middle">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th scope="col" class="py-3 px-4">ID</th>
+                    <th scope="col" class="py-3 px-4">Acción Realizada</th>
+                    <th scope="col" class="py-3 px-4">Módulo Afectado</th>
+                    <th scope="col" class="py-3 px-4">Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 fw-bold text-info">1</td>
+                    <td class="px-4">Se insertó una nueva categoría de prueba</td>
+                    <td class="px-4"><span class="badge bg-primary">Categorías</span></td>
+                    <td class="px-4 text-white-50">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
