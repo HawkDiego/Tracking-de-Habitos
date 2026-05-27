@@ -1,0 +1,57 @@
+﻿@page
+@model presentacion_web.Pages.Usuarios.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info fw-bold">
+            <i class="fas fa-users-cog me-2"></i>Gestión de Usuarios
+        </h2>
+        <a href="#" class="btn btn-success fw-bold shadow-sm" style="border-radius: 8px;">
+            <i class="fas fa-plus-circle me-2"></i>Nuevo Usuario
+        </a>
+    </div>
+
+    <hr class="border-secondary mb-4" />
+
+    <div class="table-responsive shadow-sm" style="border-radius: 10px; border: 1px solid #343a40;">
+        <table class="table table-dark table-striped table-hover mb-0 align-middle">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th scope="col" class="py-3 px-4">ID</th>
+                    <th scope="col" class="py-3 px-4">Nombre Completo</th>
+                    <th scope="col" class="py-3 px-4">Correo / Usuario</th>
+                    <th scope="col" class="py-3 px-4">Rol</th>
+                    <th scope="col" class="py-3 px-4">Estado</th>
+                    <th scope="col" class="py-3 px-4 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 fw-bold">1</td>
+                    <td class="px-4">Administrador Principal</td>
+                    <td class="px-4">admin@tracking.com</td>
+                    <td class="px-4"><span class="badge bg-danger"><i class="fas fa-shield-alt me-1"></i> Admin</span></td>
+                    <td class="px-4"><span class="badge bg-success">Activo</span></td>
+                    <td class="px-4 text-center">
+                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 fw-bold">2</td>
+                    <td class="px-4">Usuario Estándar</td>
+                    <td class="px-4">usuario@tracking.com</td>
+                    <td class="px-4"><span class="badge bg-primary"><i class="fas fa-user me-1"></i> Lector</span></td>
+                    <td class="px-4"><span class="badge bg-success">Activo</span></td>
+                    <td class="px-4 text-center">
+                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
