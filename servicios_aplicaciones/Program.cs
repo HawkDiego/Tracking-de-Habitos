@@ -10,6 +10,7 @@ using servicios_aplicaciones.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<AuditoriaFilter>();
 builder.Services
     .AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>())
@@ -75,6 +76,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseStatusCodePages();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
