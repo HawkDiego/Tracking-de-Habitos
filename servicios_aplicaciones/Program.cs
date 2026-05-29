@@ -1,4 +1,7 @@
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using lib_aplicaciones.entidades;
 using lib_aplicaciones.implementaciones;
 using lib_aplicaciones.interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +11,14 @@ using servicios_aplicaciones.Auth;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<AuditoriaFilter>();
-builder.Services.AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>());
+builder.Services
+    .AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>())
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        o.JsonSerializerOptions.TypeInfoResolver =
+            new DefaultJsonTypeInfoResolver { Modifiers = { OmitirClave } };
+    });
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<JwtHelper>();
 
@@ -69,3 +79,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 app.Run();
+
+static void OmitirClave(JsonTypeInfo tipoInfo)
+{
+    if (tipoInfo.Type != typeof(Usuarios)) return;
+    foreach (var propiedad in tipoInfo.Properties)
+        if (string.Equals(propiedad.Name, "Clave", StringComparison.OrdinalIgnoreCase))
+            propiedad.ShouldSerialize = (_, _) => false;
+}
