@@ -1,62 +1,87 @@
 ﻿@page
 @model presentacion_web.Pages.Categorias.IndexModel
 @{
-    ViewData["Title"] = "Categorías de Hábitos";
+    ViewData["Title"] = "Categorías";
 }
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+<div class="container-fluid py-4">
 
-<div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-info fw-bold">
-            <i class="fas fa-tags me-2"></i>Categorías
-        </h2>
-        <a href="#" class="btn btn-success fw-bold shadow-sm" style="border-radius: 8px;">
-            <i class="fas fa-plus-circle me-2"></i>Nueva Categoría
-        </a>
+        <div>
+            <h2 class="fw-bold text-white mb-0">📂 Categorías</h2>
+            <p class="text-secondary mb-0">Categorías de hábitos registradas</p>
+        </div>
     </div>
 
-    <hr class="border-secondary mb-4" />
+    <div id="alerta" class="alert d-none" role="alert"></div>
 
-    <div class="table-responsive shadow-sm" style="border-radius: 10px; border: 1px solid #343a40;">
-        <table class="table table-dark table-striped table-hover mb-0 align-middle">
-            <thead class="table-secondary text-dark">
-                <tr>
-                    <th scope="col" class="py-3 px-4">ID</th>
-                    <th scope="col" class="py-3 px-4">Nombre</th>
-                    <th scope="col" class="py-3 px-4">Descripción</th>
-                    <th scope="col" class="py-3 px-4 text-center">Distintivo visual</th>
-                    <th scope="col" class="py-3 px-4 text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-4 fw-bold">1</td>
-                    <td class="px-4">Salud y Fitness</td>
-                    <td class="px-4 text-white-50">Hábitos relacionados con el ejercicio y la dieta</td>
-                    <td class="px-4 text-center">
-                        <span class="badge p-2" style="background-color: #28a745; font-size: 14px;">
-                            <i class="fas fa-dumbbell"></i>
-                        </span>
-                    </td>
-                    <td class="px-4 text-center">
-                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-4 fw-bold">2</td>
-                    <td class="px-4">Desarrollo Profesional</td>
-                    <td class="px-4 text-white-50">Estudios, programación y lectura</td>
-                    <td class="px-4 text-center">
-                        <span class="badge p-2" style="background-color: #007bff; font-size: 14px;">
-                            <i class="fas fa-laptop-code"></i>
-                        </span>
-                    </td>
-                    <td class="px-4 text-center">
-                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row g-3" id="listaCategorias">
+        <div class="col-12 text-secondary">Cargando...</div>
     </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        const api = "http://localhost:5165";
+
+        function obtenerIcono(nombre) {
+            const iconos = {
+                'Salud':         '💪',
+                'Estudio':       '📚',
+                'Productividad': '🧠',
+                'Finanzas':      '💰',
+                'Bienestar':     '🧘'
+            };
+            const clave = Object.keys(iconos).find(k =>
+                nombre?.toLowerCase().includes(k.toLowerCase())
+            );
+            return clave ? iconos[clave] : '📁';
+        }
+
+        async function cargarCategorias() {
+            const contenedor = document.getElementById("listaCategorias");
+            try {
+                const res = await fetch(api + "/Categorias/Listar", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!res.ok) {
+                    contenedor.innerHTML = '<div class="text-danger">Error al cargar categorías.</div>';
+                    return;
+                }
+
+                const categorias = await res.json();
+
+                if (categorias.length === 0) {
+                    contenedor.innerHTML = '<div class="text-secondary">No hay categorías registradas.</div>';
+                    return;
+                }
+
+                contenedor.innerHTML = categorias.map(c => `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <span style="font-size:1.8rem">${obtenerIcono(c.nombre)}</span>
+                                    <h5 class="mb-0 fw-bold">${c.nombre}</h5>
+                                </div>
+                                <p class="text-secondary mb-2" style="font-size:0.9rem">${c.descripcion ?? ''}</p>
+                                <span class="badge rounded-pill px-3 py-1"
+                                      style="background-color:${c.color ?? '#555'}; color:#fff; font-size:0.75rem">
+                                    ${c.color ?? 'Sin color'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                contenedor.innerHTML = '<div class="text-danger">No se pudo conectar con la API.</div>';
+            }
+        }
+
+        cargarCategorias();
+    </script>
+}

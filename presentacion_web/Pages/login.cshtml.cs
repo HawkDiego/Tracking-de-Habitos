@@ -20,80 +20,93 @@ namespace presentacion_web.Pages
 
         public string MensajeError { get; set; } = string.Empty;
 
-        // Clase contenedora para los datos del formulario (Validaciones del Modelo)
         public class LoginInput
         {
-            [Required(ErrorMessage = "El usuario o correo es obligatorio.")]
-            public string Usuario { get; set; } = string.Empty;
+            [Required(ErrorMessage = "El correo es obligatorio.")]
+            public string Email { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "La contraseña es obligatoria.")]
             [DataType(DataType.Password)]
-            public string Password { get; set; } = string.Empty;
+            public string Clave { get; set; } = string.Empty;
         }
 
-        // Clase DTO para deserializar la respuesta de la API de Diego si es necesario
-        public class TokenResponse
+        public class LoginResponse
         {
+            public UsuarioDto? Usuario { get; set; }
             public string Token { get; set; } = string.Empty;
-            public string Usuario { get; set; } = string.Empty;
         }
 
-        public void OnGet()
+        public class UsuarioDto
         {
-            // Limpia mensajes al cargar la vista de forma limpia
-            MensajeError = string.Empty;
+            public int Id { get; set; }
+            public string? Nombre { get; set; }
+            public string? Email { get; set; }
+            public int? xpTotal { get; set; }
+            public int? Nivel { get; set; }
         }
 
-        // Ejecución asíncrona para cumplir con el Nivel 5 de la rúbrica evaluativa
+        public IActionResult OnGet()
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("JWToken")))
+                return RedirectToPage("Index");
+
+            MensajeError = string.Empty;
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
             try
             {
-                // Creamos el cliente HTTP registrado en la arquitectura
-                var client = _httpClientFactory.CreateClient();
+                var handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                var client = new HttpClient(handler);
+                client.Timeout = TimeSpan.FromSeconds(10);
 
-                // URL base provisional de la API de su backend local (ajustar puerto cuando Diego lo pase)
-                string urlApi = "https://localhost:7293/Auth/Login";
-
-                // Enviamos los datos serializados automáticamente como JSON de forma asíncrona
-                var response = await client.PostAsJsonAsync(urlApi, new
-                {
-                    username = Input.Usuario,
-                    password = Input.Password
-                });
+                var response = await client.PostAsJsonAsync(
+                    "http://localhost:5165/Usuarios/Login",
+                    new { email = Input.Email, clave = Input.Clave }
+                );
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Si el backend responde OK, leemos el contenido (token o sesión)
-                    var responseData = await response.Content.ReadFromJsonAsync<TokenResponse>();
+                    var data = await response.Content.ReadFromJsonAsync<LoginResponse>(
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    );
 
-                    if (responseData != null)
+                    if (data?.Token is not null)
                     {
-                        // AQUÍ SE AGREGA LA SESIÓN POSTERIORMENTE
-                        // HttpContext.Session.SetString("JWToken", responseData.Token);
-
-                        return RedirectToPage("/Index"); // Redirecciona al dashboard principal
+                        HttpContext.Session.SetString("JWToken", data.Token);
+                        HttpContext.Session.SetString("UsuarioNombre", data.Usuario?.Nombre ?? "Usuario");
+                        HttpContext.Session.SetInt32("UsuarioId", data.Usuario?.Id ?? 0);
+                        return RedirectToPage("Index");
                     }
                 }
 
-                // Si el backend rechaza las credenciales (Ej: Error 401 o 400)
-                MensajeError = "Credenciales incorrectas o usuario no válido en el sistema.";
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    MensajeError = "Correo o contraseña incorrectos.";
+                else
+                    MensajeError = $"Error del servidor: {(int)response.StatusCode}";
+
+                return Page();
+            }
+            catch (TaskCanceledException)
+            {
+                MensajeError = "El servidor tardó demasiado. ¿Está corriendo la API?";
                 return Page();
             }
             catch (HttpRequestException)
             {
-                // Control de errores de infraestructura (Si la API de Diego está apagada)
-                MensajeError = "No se pudo establecer conexión con el servidor de autenticación. Intente más tarde.";
+                MensajeError = "No se pudo conectar con el servidor.";
                 return Page();
             }
             catch (Exception ex)
             {
-                MensajeError = $"Ocurrió un error inesperado en la interfaz: {ex.Message}";
+                MensajeError = $"Error: {ex.Message}";
                 return Page();
             }
         }

@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace presentacion_web.Pages.Habitos
+namespace presentacion_web.Pages.Habitos;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    public IActionResult OnGet()
     {
-        public void OnGet()
-        {
-            // Próximamente: Llamado asíncrono a la API para listar los Hábitos
-        }
+        var token = HttpContext.Session.GetString("JWToken");
+        if (string.IsNullOrEmpty(token))
+            return RedirectToPage("/Login");
+
+        return Page();
     }
 }

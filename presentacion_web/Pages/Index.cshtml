@@ -1,59 +1,114 @@
 ﻿@page
-@model IndexModel
+@model presentacion_web.Pages.IndexModel
 @{
-    ViewData["Title"] = "Dashboard Principal";
+    ViewData["Title"] = "Dashboard";
+    var usuario = HttpContext.Session.GetString("UsuarioNombre") ?? "Usuario";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-info fw-bold">
-            <i class="fas fa-chart-line me-2"></i>Resumen de Actividad
-        </h2>
-        <span class="badge bg-secondary p-2 fs-6">
-            <i class="fas fa-calendar-day me-1"></i> @DateTime.Now.ToString("dd/MM/yyyy")
-        </span>
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container-fluid py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold text-white">Bienvenido, @usuario 👋</h2>
+        <p class="text-secondary">Aquí está tu resumen de hábitos</p>
     </div>
 
-    <hr class="border-secondary mb-4" />
-
-    <div class="row mb-5">
-        <div class="col-md-4">
-            <div class="card bg-dark border-secondary shadow-sm" style="border-radius: 12px;">
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-white">
                 <div class="card-body">
-                    <h6 class="card-title text-white-50 text-uppercase fw-bold">Hábitos Registrados</h6>
-                    <h2 class="text-success m-0"><i class="fas fa-check-circle me-2"></i>0</h2>
+                    <p class="text-secondary mb-1">Hábitos activos</p>
+                    <h3 class="fw-bold" id="totalHabitos">⏳</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-dark border-secondary shadow-sm" style="border-radius: 12px;">
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-white">
                 <div class="card-body">
-                    <h6 class="card-title text-white-50 text-uppercase fw-bold">Categorías Activas</h6>
-                    <h2 class="text-warning m-0"><i class="fas fa-tags me-2"></i>0</h2>
+                    <p class="text-secondary mb-1">Categorías</p>
+                    <h3 class="fw-bold" id="totalCategorias">⏳</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-white">
+                <div class="card-body">
+                    <p class="text-secondary mb-1">Usuarios</p>
+                    <h3 class="fw-bold" id="totalUsuarios">⏳</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-white">
+                <div class="card-body">
+                    <p class="text-secondary mb-1">Estado API</p>
+                    <h3 class="fw-bold text-success" id="estadoApi">⏳</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <h4 class="text-light mb-3"><i class="fas fa-history me-2 text-info"></i>Últimos Movimientos (Auditoría)</h4>
-    <div class="table-responsive shadow-sm" style="border-radius: 10px; border: 1px solid #343a40;">
-        <table class="table table-dark table-striped table-hover mb-0 align-middle">
-            <thead class="table-secondary text-dark">
-                <tr>
-                    <th scope="col" class="py-3 px-4">ID</th>
-                    <th scope="col" class="py-3 px-4">Acción Realizada</th>
-                    <th scope="col" class="py-3 px-4">Módulo Afectado</th>
-                    <th scope="col" class="py-3 px-4">Fecha y Hora</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-4 fw-bold text-info">1</td>
-                    <td class="px-4">Se insertó una nueva categoría de prueba</td>
-                    <td class="px-4"><span class="badge bg-primary">Categorías</span></td>
-                    <td class="px-4 text-white-50">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a href="/Categorias" class="text-decoration-none">
+                <div class="card bg-dark border-secondary text-white h-100">
+                    <div class="card-body">
+                        <h5>📂 Categorías</h5>
+                        <p class="text-secondary">Ver y gestionar categorías de hábitos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Habitos" class="text-decoration-none">
+                <div class="card bg-dark border-secondary text-white h-100">
+                    <div class="card-body">
+                        <h5>✅ Hábitos</h5>
+                        <p class="text-secondary">Revisa tus hábitos y su progreso</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Usuarios" class="text-decoration-none">
+                <div class="card bg-dark border-secondary text-white h-100">
+                    <div class="card-body">
+                        <h5>👤 Usuarios</h5>
+                        <p class="text-secondary">Administrar usuarios registrados</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        const api = "http://localhost:5165";
+
+        async function cargar(url, elementId) {
+            try {
+                const res = await fetch(url, {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById(elementId).textContent = data.length;
+                } else {
+                    document.getElementById(elementId).textContent = "—";
+                }
+            } catch (e) {
+                document.getElementById(elementId).textContent = "—";
+            }
+        }
+
+        cargar(api + "/Habitos/Listar",     "totalHabitos");
+        cargar(api + "/Categorias/Listar",  "totalCategorias");
+        cargar(api + "/Usuarios/Listar",    "totalUsuarios");
+        document.getElementById("estadoApi").textContent = "✓ Online";
+        document.getElementById("estadoApi").className = "fw-bold text-success";
+    </script>
+}

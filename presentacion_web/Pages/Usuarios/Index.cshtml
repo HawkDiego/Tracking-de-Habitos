@@ -1,57 +1,86 @@
 ﻿@page
 @model presentacion_web.Pages.Usuarios.IndexModel
 @{
-    ViewData["Title"] = "Gestión de Usuarios";
+    ViewData["Title"] = "Usuarios";
 }
 
-<div class="container mt-4">
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container-fluid py-4">
+
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-info fw-bold">
-            <i class="fas fa-users-cog me-2"></i>Gestión de Usuarios
-        </h2>
-        <a href="#" class="btn btn-success fw-bold shadow-sm" style="border-radius: 8px;">
-            <i class="fas fa-plus-circle me-2"></i>Nuevo Usuario
-        </a>
+        <div>
+            <h2 class="fw-bold text-white mb-0">👤 Usuarios</h2>
+            <p class="text-secondary mb-0">Usuarios registrados en el sistema</p>
+        </div>
     </div>
 
-    <hr class="border-secondary mb-4" />
-
-    <div class="table-responsive shadow-sm" style="border-radius: 10px; border: 1px solid #343a40;">
-        <table class="table table-dark table-striped table-hover mb-0 align-middle">
-            <thead class="table-secondary text-dark">
-                <tr>
-                    <th scope="col" class="py-3 px-4">ID</th>
-                    <th scope="col" class="py-3 px-4">Nombre Completo</th>
-                    <th scope="col" class="py-3 px-4">Correo / Usuario</th>
-                    <th scope="col" class="py-3 px-4">Rol</th>
-                    <th scope="col" class="py-3 px-4">Estado</th>
-                    <th scope="col" class="py-3 px-4 text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-4 fw-bold">1</td>
-                    <td class="px-4">Administrador Principal</td>
-                    <td class="px-4">admin@tracking.com</td>
-                    <td class="px-4"><span class="badge bg-danger"><i class="fas fa-shield-alt me-1"></i> Admin</span></td>
-                    <td class="px-4"><span class="badge bg-success">Activo</span></td>
-                    <td class="px-4 text-center">
-                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-4 fw-bold">2</td>
-                    <td class="px-4">Usuario Estándar</td>
-                    <td class="px-4">usuario@tracking.com</td>
-                    <td class="px-4"><span class="badge bg-primary"><i class="fas fa-user me-1"></i> Lector</span></td>
-                    <td class="px-4"><span class="badge bg-success">Activo</span></td>
-                    <td class="px-4 text-center">
-                        <button class="btn btn-sm btn-outline-info me-1" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row g-3" id="listaUsuarios">
+        <div class="col-12 text-secondary">Cargando...</div>
     </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        const api = "http://localhost:5165";
+
+        async function cargarUsuarios() {
+            const contenedor = document.getElementById("listaUsuarios");
+            try {
+                const res = await fetch(api + "/Usuarios/Listar", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!res.ok) {
+                    contenedor.innerHTML = `<div class="text-danger">Error ${res.status} al cargar usuarios.</div>`;
+                    return;
+                }
+
+                const usuarios = await res.json();
+
+                if (usuarios.length === 0) {
+                    contenedor.innerHTML = '<div class="text-secondary">No hay usuarios registrados.</div>';
+                    return;
+                }
+
+                const niveles = ['', 'Inicial', 'Constante', 'Comprometido', 'Avanzado', 'Elite'];
+                const colores = ['', 'secondary', 'info', 'primary', 'warning', 'danger'];
+
+                contenedor.innerHTML = usuarios.map(u => {
+                    const iniciales = u.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    const nivel = niveles[u.nivel] ?? 'Sin nivel';
+                    const color = colores[u.nivel] ?? 'secondary';
+                    return `
+                        <div class="col-md-4 col-lg-3">
+                            <div class="card bg-dark border-secondary text-white h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center fw-bold"
+                                             style="width:48px;height:48px;font-size:1.1rem;flex-shrink:0">
+                                            ${iniciales}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">${u.nombre}</h6>
+                                            <small class="text-secondary">${u.email}</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-${color}">${nivel}</span>
+                                        <span class="text-warning fw-bold">${u.xpTotal ?? 0} XP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                contenedor.innerHTML = '<div class="text-danger">No se pudo conectar con la API.</div>';
+            }
+        }
+
+        cargarUsuarios();
+    </script>
+}

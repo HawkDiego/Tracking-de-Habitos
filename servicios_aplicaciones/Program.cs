@@ -7,6 +7,16 @@ using servicios_aplicaciones.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:7125", "http://localhost:7125")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<AuditoriaFilter>();
 builder.Services.AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>());
 builder.Services.AddOpenApi();
@@ -65,6 +75,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();

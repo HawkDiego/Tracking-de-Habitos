@@ -1,0 +1,24 @@
+[33mc31f800[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m feat: Diseño de la vista principal de Hábitos con barras de progreso
+[33m9590741[m feat: Implementación de barra de navegación global (Navbar) responsiva
+[33m4417155[m feat: Diseño de la vista de Categorías con indicadores visuales
+[33me48e0b7[m feat: Diseño de la vista de Gestión de Usuarios y Roles
+[33m3767c24[m feat: Diseño del Dashboard principal y maqueta de tabla de Auditorías
+[33md548b9e[m feat: Estructura inicial del Frontend, UI de Login asíncrono y configuración de Sesiones
+[33m2b2120e[m Auditorias usando accion filters
+[33md3c93df[m Implementacion de JWT junto con endpoints de login y cambios en el sql
+[33m0c1bb8c[m chore: delete claude.md
+[33m6789f18[m chore: add .gitignore y destrackear bin/obj/.idea
+[33m52ed447[m Se elimina el placeholder de los controladores
+[33m3842001[m Controladores para entidad (solo CRUD basico sin validaciones)
+[33m68190bb[m Implementaciones de los servicios e interfaces para estos
+[33m4806a1c[m Fix en obtener el string de la base de datos
+[33m6c8b6ca[m Implementacion del servicio base para todos los controladores con el CRUD completo
+[33mf7d2cc4[m Generico en las entidades para que el generico entienda que se necesita id y estado para los servicios basicos
+[33m5e3de9e[m Tipo generico en IConexion y mejor manejo de la url de la base de datos en Conexion
+[33m486133c[m Ajuste a los unit test con la nueva logica de optencion de la url de la base de datos
+[33m2ad02ce[m Test con CRUD
+[33m4d36c10[m Inserts con estados en toda la base de datos
+[33m164f265[m Fix logica de estados faltante en una entidad
+[33m1912b36[m Logica de estados en las tablas
+[33m6f00912[m Nueva logica de eliminacion con estados
+[33m15bbdb5[m Proyecto base tracking de habitos

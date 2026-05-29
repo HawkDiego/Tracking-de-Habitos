@@ -29,5 +29,10 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+app.MapGet("/", context => {
+    context.Response.Redirect("/Index");
+    return Task.CompletedTask;
+});
+
 
 app.Run();
