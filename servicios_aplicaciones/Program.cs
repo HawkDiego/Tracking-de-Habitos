@@ -1,4 +1,7 @@
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using lib_aplicaciones.entidades;
 using lib_aplicaciones.implementaciones;
 using lib_aplicaciones.interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,18 +10,16 @@ using servicios_aplicaciones.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendPolicy", policy =>
-    {
-        policy.WithOrigins("https://localhost:7125", "http://localhost:7125")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<AuditoriaFilter>();
-builder.Services.AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>());
+builder.Services
+    .AddControllers(opt => opt.Filters.AddService<AuditoriaFilter>())
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        o.JsonSerializerOptions.TypeInfoResolver =
+            new DefaultJsonTypeInfoResolver { Modifiers = { OmitirClave } };
+    });
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<JwtHelper>();
 
@@ -75,8 +76,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors("FrontendPolicy");
+app.UseStatusCodePages();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 app.Run();
+
+static void OmitirClave(JsonTypeInfo tipoInfo)
+{
+    if (tipoInfo.Type != typeof(Usuarios)) return;
+    foreach (var propiedad in tipoInfo.Properties)
+        if (string.Equals(propiedad.Name, "Clave", StringComparison.OrdinalIgnoreCase))
+            propiedad.ShouldSerialize = (_, _) => false;
+}

@@ -31,9 +31,18 @@ public class UsuariosController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     public ActionResult Insertar([FromBody] Usuarios entidad)
-        => _servicio.Insertar(entidad)
-            ? CreatedAtAction(nameof(ObtenerPorId), new { id = entidad.Id }, entidad)
-            : BadRequest();
+    {
+        try
+        {
+            return _servicio.Insertar(entidad)
+                ? CreatedAtAction(nameof(ObtenerPorId), new { id = entidad.Id }, entidad)
+                : Problem(detail: "No se pudo registrar el usuario.", statusCode: StatusCodes.Status400BadRequest);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest);
+        }
+    }
 
     [HttpPut]
     public ActionResult Actualizar([FromBody] Usuarios entidad)
@@ -48,7 +57,8 @@ public class UsuariosController : ControllerBase
     public ActionResult Login([FromBody] Usuarios credenciales)
     {
         var u = _servicio.Login(credenciales.Email ?? "", credenciales.Clave ?? "");
-        if (u is null) return Unauthorized();
+        if (u is null)
+            return Problem(detail: "Email o clave incorrectos.", statusCode: StatusCodes.Status401Unauthorized);
 
         var token = _jwt.GenerarToken(u);
         return Ok(new { usuario = u, token });

@@ -11,10 +11,10 @@ public class UsuariosServicio : ServicioBase<Usuarios>, IUsuariosServicio
     public override bool Insertar(Usuarios entidad)
     {
         if (string.IsNullOrWhiteSpace(entidad.Email) || string.IsNullOrWhiteSpace(entidad.Clave))
-            return false;
+            throw new InvalidOperationException("El email y la clave son obligatorios.");
 
         if (Set.Any(u => u.Email == entidad.Email && u.Estado != 99))
-            return false;
+            throw new InvalidOperationException("El email ya está registrado.");
 
         entidad.Clave = Hash.Sha256(entidad.Clave);
         if (entidad.FechaRegistro == default) entidad.FechaRegistro = DateTime.Now;
