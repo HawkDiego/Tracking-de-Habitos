@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-namespace presentacion_web.Pages.Frecuencias;
+namespace presentacion_web.Pages.Grupos;
 
 public class IndexModel : PageModel
 {

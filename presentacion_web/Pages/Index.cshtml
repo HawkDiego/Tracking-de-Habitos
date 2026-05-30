@@ -9,9 +9,14 @@
 
 <div class="container-fluid py-4">
 
-    <div class="mb-4">
-        <h2 class="fw-bold text-white">Bienvenido, @usuario 👋</h2>
-        <p class="text-secondary">Aquí está tu resumen de hábitos</p>
+    <div class="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold text-white">Bienvenido, @usuario 👋</h2>
+            <p class="text-secondary">Aquí está tu resumen de hábitos</p>
+        </div>
+        <button onclick="exportarExcel()" class="btn btn-success">
+            <i class="fas fa-file-excel me-2"></i>Exportar Reporte Excel
+        </button>
     </div>
 
     <div class="row g-3 mb-4">
@@ -105,10 +110,42 @@
             }
         }
 
-        cargar(api + "/Habitos/Listar",     "totalHabitos");
-        cargar(api + "/Categorias/Listar",  "totalCategorias");
-        cargar(api + "/Usuarios/Listar",    "totalUsuarios");
+        cargar(api + "/Habitos/Listar",    "totalHabitos");
+        cargar(api + "/Categorias/Listar", "totalCategorias");
+        cargar(api + "/Usuarios/Listar",   "totalUsuarios");
         document.getElementById("estadoApi").textContent = "✓ Online";
         document.getElementById("estadoApi").className = "fw-bold text-success";
+
+        function exportarExcel() {
+            Promise.all([
+                fetch(api + "/Usuarios/Listar",   { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()),
+                fetch(api + "/Habitos/Listar",    { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()),
+                fetch(api + "/Categorias/Listar", { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()),
+                fetch(api + "/Niveles/Listar",    { headers: { "Authorization": "Bearer " + token } }).then(r => r.json())
+            ]).then(([usuarios, habitos, categorias, niveles]) => {
+                const wb = XLSX.utils.book_new();
+
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(usuarios.map(u => ({
+                    ID: u.id, Nombre: u.nombre, Email: u.email,
+                    'XP Total': u.xpTotal, Nivel: u.nivel
+                }))), "Usuarios");
+
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(habitos.map(h => ({
+                    ID: h.id, Nombre: h.nombre, Descripcion: h.descripcion,
+                    'XP': h.xpOtorgada, Categoria: h.categoria
+                }))), "Hábitos");
+
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(categorias.map(c => ({
+                    ID: c.id, Nombre: c.nombre, Descripcion: c.descripcion, Color: c.color
+                }))), "Categorías");
+
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(niveles.map(n => ({
+                    ID: n.id, Nombre: n.nombre, 'XP Mínimo': n.limiteInferiorXp,
+                    'XP Máximo': n.limiteSuperiorXp, Descripcion: n.descripcion
+                }))), "Niveles");
+
+                XLSX.writeFile(wb, "Reporte_TrackHabit.xlsx");
+            }).catch(e => alert("Error al generar el reporte: " + e));
+        }
     </script>
 }

@@ -1,0 +1,40 @@
+﻿@page
+@model presentacion_web.Pages.Desafios.IndexModel
+@{
+    ViewData["Title"] = "Desafíos";
+}
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold text-white mb-0"><i class="fas fa-fist-raised me-2"></i>Desafíos</h2>
+        <p class="text-secondary mb-0">Desafíos grupales activos</p>
+    </div>
+    <div class="row g-3" id="listaDesafios"><div class="text-secondary">Cargando...</div></div>
+</div>
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        async function cargar() {
+            const c = document.getElementById("listaDesafios");
+            try {
+                const res = await fetch("http://localhost:5165/Desafios/Listar", { headers: { "Authorization": "Bearer " + token } });
+                const data = await res.json();
+                c.innerHTML = data.map(d => `
+                    <div class="col-md-4">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body">
+                                <h5 class="fw-bold"><i class="fas fa-fist-raised me-2 text-warning"></i>${d.nombre}</h5>
+                                <p class="text-secondary mb-2">${d.descripcion ?? '—'}</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-secondary">${new Date(d.fechaInicio).toLocaleDateString('es-CO')}</small>
+                                    <small class="text-secondary">${new Date(d.fechaFin).toLocaleDateString('es-CO')}</small>
+                                </div>
+                                <span class="badge bg-warning text-dark">+${d.xpBono} XP Bono</span>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+        }
+        cargar();
+    </script>
+}
