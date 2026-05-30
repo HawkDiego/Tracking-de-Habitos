@@ -10,6 +10,16 @@ using servicios_aplicaciones.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:7125", "http://localhost:7125")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<AuditoriaFilter>();
 builder.Services
@@ -77,6 +87,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStatusCodePages();
+app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
