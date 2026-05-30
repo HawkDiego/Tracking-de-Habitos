@@ -24,11 +24,11 @@
                         <div class="card bg-dark border-secondary text-white h-100">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span style="font-size:1.5rem">${n.estadoDeAnimoEmoji ?? '📝'}</span>
+                                    <span style="font-size:1.5rem">${n.estadoDeAnimoEmoji || '&#128221;'}</span>
                                     <small class="text-secondary">${new Date(n.fechaCreacion).toLocaleDateString('es-CO')}</small>
                                 </div>
                                 <p class="mb-2">${n.texto ?? '—'}</p>
-                                <span class="badge ${n.esPrivada ? 'bg-secondary' : 'bg-info text-dark'}">${n.esPrivada ? '🔒 Privada' : '🌐 Pública'}</span>
+                                <span class="badge ${n.esPrivada ? 'bg-secondary' : 'bg-info text-dark'}">${n.esPrivada ? '&#128274; Privada' : '&#127760; P\u00FAblica'}</span>
                             </div>
                         </div>
                     </div>`).join('');
