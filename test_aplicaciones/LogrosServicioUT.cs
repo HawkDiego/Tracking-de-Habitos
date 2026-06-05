@@ -14,8 +14,7 @@ public sealed class LogrosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Logros>(_conexion, _conexion.Logros!);
+        _servicio = new LogrosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class LogrosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var logro = new Logros { Titulo = "Logro Test", DescripcionRequisito = "Requisito de prueba", XpOtorgada = 10 };
+        var logro = new Logros { Titulo = "Logro Test", DescripcionRequisito = "Requisito de prueba", XpOtorgada = 10, Estado = 1 };
         bool resultado = _servicio.Insertar(logro);
         if (resultado) return;
         throw new Exception("No se pudo insertar el logro");

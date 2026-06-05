@@ -14,8 +14,7 @@ public sealed class ParticipacionDesafiosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<ParticipacionDesafios>(_conexion, _conexion.ParticipacionDesafios!);
+        _servicio = new ParticipacionDesafiosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class ParticipacionDesafiosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var participacion = new ParticipacionDesafios { Desafio = 1, UsuariosGrupo = 1, ProgresoActual = 50.0m, RankingPosicion = 1 };
+        var participacion = new ParticipacionDesafios { Desafio = 1, UsuariosGrupo = 1, ProgresoActual = 50.0m, RankingPosicion = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(participacion);
         if (resultado) return;
         throw new Exception("No se pudo insertar la participacion en desafio");

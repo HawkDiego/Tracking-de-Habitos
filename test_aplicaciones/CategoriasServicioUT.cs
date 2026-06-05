@@ -14,8 +14,7 @@ public sealed class CategoriasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Categorias>(_conexion, _conexion.Categorias!);
+        _servicio = new CategoriasServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class CategoriasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var categoria = new Categorias { Nombre = "Test2", Descripcion = "Categoria de prueba", Color = "#000000", Icono = "🔧" };
+        var categoria = new Categorias { Nombre = "Test2", Descripcion = "Categoria de prueba", Color = "#000000", Icono = "🔧", Estado = 1 };
         bool resultado = _servicio.Insertar(categoria);
         if (resultado) return;
         throw new Exception("No se pudo insertar la categoria");

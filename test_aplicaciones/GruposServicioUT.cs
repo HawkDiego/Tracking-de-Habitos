@@ -14,8 +14,7 @@ public sealed class GruposServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Grupos>(_conexion, _conexion.Grupos!);
+        _servicio = new GruposServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class GruposServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var grupo = new Grupos { Nombre = "Grupo Test", Descripcion = "Descripcion de prueba", Administrador = 1 };
+        var grupo = new Grupos { Nombre = "Grupo Test", Descripcion = "Descripcion de prueba", Administrador = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(grupo);
         if (resultado) return;
         throw new Exception("No se pudo insertar el grupo");

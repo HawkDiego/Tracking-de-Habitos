@@ -1,18 +1,29 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using lib_aplicaciones.interfaces;
 
 namespace lib_aplicaciones.entidades;
 
-public class Habitos
+public class Habitos : IEntidad
 {
     public int Id { get; set; }
+
+    [Range(1, int.MaxValue)]
     public int Usuario { get; set; }
+
+    [Required]
+    [StringLength(100)]
     public string? Nombre { get; set; }
+
+    [StringLength(300)]
     public string? Descripcion { get; set; }
+
     public DateTime FechaCreacion { get; set; }
-    public bool Activo { get; set; }
+
     public int? XpOtorgada { get; set; }
     public int? Categoria { get; set; }
     public int? Frecuencia { get; set; }
+    public int? Estado { get; set; }
 
     [ForeignKey("Usuario")]
     public Usuarios? _Usuario { get; set; }

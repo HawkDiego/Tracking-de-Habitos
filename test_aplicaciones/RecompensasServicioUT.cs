@@ -14,8 +14,7 @@ public sealed class RecompensasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Recompensas>(_conexion, _conexion.Recompensas!);
+        _servicio = new RecompensasServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class RecompensasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var recompensa = new Recompensas { Nombre = "Recompensa Test", Descripcion = "Descripcion de prueba", NivelRequerido = 1, EsEstetica = true };
+        var recompensa = new Recompensas { Nombre = "Recompensa Test", Descripcion = "Descripcion de prueba", NivelRequerido = 1, EsEstetica = true, Estado = 1 };
         bool resultado = _servicio.Insertar(recompensa);
         if (resultado) return;
         throw new Exception("No se pudo insertar la recompensa");

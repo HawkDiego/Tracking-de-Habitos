@@ -14,8 +14,7 @@ public sealed class UsuariosLogrosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<UsuariosLogros>(_conexion, _conexion.UsuariosLogros!);
+        _servicio = new UsuariosLogrosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class UsuariosLogrosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var usuarioLogro = new UsuariosLogros { Usuario = 1, Logro = 1, FechaObtencion = DateTime.Today };
+        var usuarioLogro = new UsuariosLogros { Usuario = 1, Logro = 1, FechaObtencion = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(usuarioLogro);
         if (resultado) return;
         throw new Exception("No se pudo insertar el usuario logro");

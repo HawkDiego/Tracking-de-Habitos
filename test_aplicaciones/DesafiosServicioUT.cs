@@ -14,8 +14,7 @@ public sealed class DesafiosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Desafios>(_conexion, _conexion.Desafios!);
+        _servicio = new DesafiosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class DesafiosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var desafio = new Desafios { GrupoAdministrador = 1, Nombre = "Desafio Test", Descripcion = "Descripcion de prueba", FechaInicio = DateTime.Today, FechaFin = DateTime.Today.AddDays(7), XpBono = 50 };
+        var desafio = new Desafios { GrupoAdministrador = 1, Nombre = "Desafio Test", Descripcion = "Descripcion de prueba", FechaInicio = DateTime.Today, FechaFin = DateTime.Today.AddDays(7), XpBono = 50, Estado = 1 };
         bool resultado = _servicio.Insertar(desafio);
         if (resultado) return;
         throw new Exception("No se pudo insertar el desafio");

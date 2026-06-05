@@ -14,8 +14,7 @@ public sealed class FrecuenciasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Frecuencias>(_conexion, _conexion.Frecuencias!);
+        _servicio = new FrecuenciasServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class FrecuenciasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var frecuencia = new Frecuencias { TipoIntervalo = "diario", DiasSemana = null, VecesPorDia = 1, esPersonalizada = false };
+        var frecuencia = new Frecuencias { TipoIntervalo = "diario", DiasSemana = null, VecesPorDia = 1, esPersonalizada = false, Estado = 1 };
         bool resultado = _servicio.Insertar(frecuencia);
         if (resultado) return;
         throw new Exception("No se pudo insertar la frecuencia");

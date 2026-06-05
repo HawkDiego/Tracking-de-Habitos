@@ -1,0 +1,39 @@
+﻿@page
+@model presentacion_web.Pages.Notas.IndexModel
+@{
+    ViewData["Title"] = "Notas";
+}
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold text-white mb-0"><i class="fas fa-sticky-note me-2"></i>Notas</h2>
+        <p class="text-secondary mb-0">Notas de progreso registradas</p>
+    </div>
+    <div class="row g-3" id="listaNotas"><div class="text-secondary">Cargando...</div></div>
+</div>
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        async function cargar() {
+            const c = document.getElementById("listaNotas");
+            try {
+                const res = await fetch("http://localhost:5165/Notas/Listar", { headers: { "Authorization": "Bearer " + token } });
+                const data = await res.json();
+                c.innerHTML = data.map(n => `
+                    <div class="col-md-4">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span style="font-size:1.5rem">${n.estadoDeAnimoEmoji || '&#128221;'}</span>
+                                    <small class="text-secondary">${new Date(n.fechaCreacion).toLocaleDateString('es-CO')}</small>
+                                </div>
+                                <p class="mb-2">${n.texto ?? '—'}</p>
+                                <span class="badge ${n.esPrivada ? 'bg-secondary' : 'bg-info text-dark'}">${n.esPrivada ? '&#128274; Privada' : '&#127760; P\u00FAblica'}</span>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+        }
+        cargar();
+    </script>
+}

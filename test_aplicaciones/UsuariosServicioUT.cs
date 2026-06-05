@@ -14,8 +14,7 @@ public sealed class UsuariosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Usuarios>(_conexion, _conexion.Usuarios!);
+        _servicio = new UsuariosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class UsuariosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var usuario = new Usuarios { Nombre = "Test User", Email = "test@habitapp.com", Clave = "ClaveTest#2026", FechaRegistro = DateTime.Today, xpTotal = 0, Nivel = 1, Configuracion = 1 };
+        var usuario = new Usuarios { Nombre = "Test User", Email = $"test_{Guid.NewGuid():N}@habitapp.com", Clave = "ClaveTest#2026", FechaRegistro = DateTime.Today, xpTotal = 0, Nivel = 1, Configuracion = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(usuario);
         if (resultado) return;
         throw new Exception("No se pudo insertar el usuario");

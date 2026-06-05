@@ -2,7 +2,7 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ASingleQueryingEnumerable_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E3_003Fresharper_002Dhost_003FSourcesCache_003F413341ec7da6e42cb630e52ba9208edacb2e7267da1d9296f51628fcd35e81d9_003FSingleQueryingEnumerable_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ASqlConnectionFactory_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F85909119e12d488ca3a35e218a2fa37217ca90_003Fdf_003F84ce67d3_003FSqlConnectionFactory_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4684e4a7_002D6916_002D4f81_002D9fbe_002D5de56f7bf726/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;test_aplicaciones&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Project Location="/Users/diegogiraldo/Downloads/Practica2/tracking_habitos/test_aplicaciones" Presentation="&amp;lt;test_aplicaciones&amp;gt;" /&gt;
+  &lt;Project Location="/Users/diegogiraldo/Desktop/Practica2/tracking_habitos" Presentation="&amp;lt;test unitarios&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	</wpf:ResourceDictionary>

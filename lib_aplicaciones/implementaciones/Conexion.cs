@@ -7,6 +7,10 @@ namespace lib_aplicaciones.implementaciones;
 public class Conexion: DbContext, IConexion
 {
     public string? StringConexion { get; set; }
+
+    public Conexion() => StringConexion = lib_aplicaciones.nucleo.Configuraciones.obtener("BD");
+    public Conexion(string cadena) => StringConexion = cadena;
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(this.StringConexion!, p => { });
@@ -34,4 +38,5 @@ public class Conexion: DbContext, IConexion
     public DbSet<Desafios>? Desafios { get; set; }
     public DbSet<Notas>? Notas { get; set; }
     public DbSet<ParticipacionDesafios>? ParticipacionDesafios { get; set; }
+    public DbSet<Auditorias>? Auditorias { get; set; }
 }

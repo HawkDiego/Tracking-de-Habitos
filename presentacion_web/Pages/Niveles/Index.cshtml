@@ -1,0 +1,63 @@
+﻿@page
+@model presentacion_web.Pages.Niveles.IndexModel
+@{
+    ViewData["Title"] = "Niveles";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold text-white mb-0">⭐ Niveles</h2>
+        <p class="text-secondary mb-0">Niveles de progreso del sistema</p>
+    </div>
+
+    <div class="row g-3" id="listaNiveles">
+        <div class="col-12 text-secondary">Cargando...</div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        const api = "http://localhost:5165";
+
+        async function cargarNiveles() {
+            const contenedor = document.getElementById("listaNiveles");
+            try {
+                const res = await fetch(api + "/Niveles/Listar", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!res.ok) {
+                    contenedor.innerHTML = `<div class="text-danger">Error ${res.status}</div>`;
+                    return;
+                }
+
+                const niveles = await res.json();
+                const colores = ['secondary', 'info', 'primary', 'warning', 'danger'];
+
+                contenedor.innerHTML = niveles.map((n, i) => `
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body text-center">
+                                <div class="mb-2" style="font-size:2rem">⭐</div>
+                                <h5 class="fw-bold">${n.nombre}</h5>
+                                <span class="badge bg-${colores[i] ?? 'secondary'} mb-2">Nivel ${n.id}</span>
+                                <p class="text-secondary mb-1" style="font-size:0.85rem">${n.descripcion}</p>
+                                <div class="mt-2 text-warning" style="font-size:0.8rem">
+                                    ${n.limiteInferiorXp} — ${n.limiteSuperiorXp} XP
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                contenedor.innerHTML = '<div class="text-danger">No se pudo conectar con la API.</div>';
+            }
+        }
+
+        cargarNiveles();
+    </script>
+}

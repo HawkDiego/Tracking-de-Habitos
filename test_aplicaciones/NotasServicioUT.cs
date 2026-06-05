@@ -14,8 +14,7 @@ public sealed class NotasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Notas>(_conexion, _conexion.Notas!);
+        _servicio = new NotasServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class NotasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var nota = new Notas { Texto = "Nota de prueba", FechaCreacion = DateTime.Today, EstadoDeAnimoEmoji = "😀", EsPrivada = true, RegistroProgreso = 1 };
+        var nota = new Notas { Texto = "Nota de prueba", FechaCreacion = DateTime.Today, EstadoDeAnimoEmoji = "😀", EsPrivada = true, RegistroProgreso = 1, Estado = 1 };
         bool resultado = _servicio.Insertar(nota);
         if (resultado) return;
         throw new Exception("No se pudo insertar la nota");

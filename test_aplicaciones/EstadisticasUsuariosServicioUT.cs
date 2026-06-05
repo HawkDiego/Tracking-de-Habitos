@@ -14,8 +14,7 @@ public sealed class EstadisticasUsuariosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<EstadisticasUsuarios>(_conexion, _conexion.EstadisticasUsuarios!);
+        _servicio = new EstadisticasUsuariosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class EstadisticasUsuariosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var estadistica = new EstadisticasUsuarios { Usuario = 1, Mes = 3, Anio = 2026, HabitosCompletados = 5, XpGanadaMes = 50, MejorRacha = 3, TotalNotas = 2, FechaCalculo = DateTime.Today };
+        var estadistica = new EstadisticasUsuarios { Usuario = 1, Mes = 3, Anio = 2026, HabitosCompletados = 5, XpGanadaMes = 50, MejorRacha = 3, TotalNotas = 2, FechaCalculo = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(estadistica);
         if (resultado) return;
         throw new Exception("No se pudo insertar la estadistica");

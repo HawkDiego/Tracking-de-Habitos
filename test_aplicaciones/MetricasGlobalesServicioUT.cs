@@ -14,8 +14,7 @@ public sealed class MetricasGlobalesServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<MetricasGlobales>(_conexion, _conexion.MetricasGlobales!);
+        _servicio = new MetricasGlobalesServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class MetricasGlobalesServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var metrica = new MetricasGlobales { TotalUsuariosActivos = 100, PromedioXpPlataforma = 150, HabitoMasPopular = 1, CategoriaMasUsada = 1, FechaCalculo = DateTime.Today };
+        var metrica = new MetricasGlobales { TotalUsuariosActivos = 100, PromedioXpPlataforma = 150, HabitoMasPopular = 1, CategoriaMasUsada = 1, FechaCalculo = DateTime.Today, Estado = 1 };
         bool resultado = _servicio.Insertar(metrica);
         if (resultado) return;
         throw new Exception("No se pudo insertar la metrica global");

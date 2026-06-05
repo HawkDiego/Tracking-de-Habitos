@@ -14,8 +14,7 @@ public sealed class RecordatoriosServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Recordatorios>(_conexion, _conexion.Recordatorios!);
+        _servicio = new RecordatoriosServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class RecordatoriosServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var recordatorio = new Recordatorios { Habito = 1, HoraEjecucion = "07:00", Mensaje = "Recordatorio de prueba", Activo = true };
+        var recordatorio = new Recordatorios { Habito = 1, HoraEjecucion = "07:00", Mensaje = "Recordatorio de prueba", Estado = 1 };
         bool resultado = _servicio.Insertar(recordatorio);
         if (resultado) return;
         throw new Exception("No se pudo insertar el recordatorio");

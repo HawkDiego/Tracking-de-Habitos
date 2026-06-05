@@ -14,8 +14,7 @@ public sealed class RachasServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Rachas>(_conexion, _conexion.Rachas!);
+        _servicio = new RachasServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class RachasServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var racha = new Rachas { Habito = 1, ConteoActual = 1, MaximaHistorica = 1, FechaUltimoIncremento = DateTime.Today, MultiplicadorXp = 1.0m };
+        var racha = new Rachas { Habito = 1, ConteoActual = 1, MaximaHistorica = 1, FechaUltimoIncremento = DateTime.Today, MultiplicadorXp = 1.0m, Estado = 1 };
         bool resultado = _servicio.Insertar(racha);
         if (resultado) return;
         throw new Exception("No se pudo insertar la racha");

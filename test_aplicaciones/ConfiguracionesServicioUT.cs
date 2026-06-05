@@ -14,8 +14,7 @@ public sealed class ConfiguracionesServicioUT
     public void Inicializar()
     {
         _conexion = new Conexion();
-        _conexion.StringConexion = "server=localhost,1433;User Id=sa;Password=TuPassword123!;TrustServerCertificate=true;database=tracking_habitos;";
-        _servicio = new Servicio<Configuraciones>(_conexion, _conexion.Configuraciones!);
+        _servicio = new ConfiguracionesServicio(_conexion);
     }
 
     [TestMethod]
@@ -37,7 +36,7 @@ public sealed class ConfiguracionesServicioUT
     [TestMethod]
     public void Insertar()
     {
-        var configuracion = new Configuraciones { Tema = "claro", Idioma = "es", ZonaHoraria = "America/Bogota", Notificaciones = true, SonidoAlerta = true };
+        var configuracion = new Configuraciones { Tema = "claro", Idioma = "es", ZonaHoraria = "America/Bogota", Notificaciones = true, SonidoAlerta = true, Estado = 1 };
         bool resultado = _servicio.Insertar(configuracion);
         if (resultado) return;
         throw new Exception("No se pudo insertar la configuracion");
