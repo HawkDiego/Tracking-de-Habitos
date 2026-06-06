@@ -1,0 +1,42 @@
+﻿@page
+@model PresentacionWeb.Pages.Notas.CrearModel
+@{
+    ViewData["Title"] = "Nueva Nota";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4"><i class="fas fa-sticky-note me-2"></i>Nueva Nota</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white shadow-sm">
+        <div class="card-body">
+            <div class="mb-3"><label class="form-label">Texto</label><textarea id="texto" class="form-control bg-secondary text-white border-0" rows="4" placeholder="Escribe tu nota aquí..."></textarea></div>
+            <div class="mb-3"><label class="form-label">Estado de Ánimo (emoji)</label><input type="text" id="estadoDeAnimoEmoji" class="form-control bg-secondary text-white border-0" placeholder="😀" maxlength="10" /></div>
+            <div class="mb-3"><label class="form-label">ID Registro de Progreso</label><input type="number" id="registroProgreso" class="form-control bg-secondary text-white border-0" min="1" /></div>
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="esPrivada" checked />
+                <label class="form-check-label" for="esPrivada">Es Privada</label>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-info" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <a href="/Notas" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        async function guardar() {
+            const rp = document.getElementById('registroProgreso').value;
+            const body = { texto: document.getElementById('texto').value, estadoDeAnimoEmoji: document.getElementById('estadoDeAnimoEmoji').value || null, esPrivada: document.getElementById('esPrivada').checked, registroProgreso: rp ? parseInt(rp) : null, fechaCreacion: new Date().toISOString(), estado: 1 };
+            const res = await fetch(API_URL + '/Notas/Insertar', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok || res.status === 201) window.location.href = '/Notas';
+            else mostrarAlerta('No se pudo guardar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+    </script>
+}

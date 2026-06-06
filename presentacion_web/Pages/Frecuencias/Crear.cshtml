@@ -1,0 +1,50 @@
+﻿@page
+@model PresentacionWeb.Pages.Frecuencias.CrearModel
+@{
+    ViewData["Title"] = "Nueva Frecuencia";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4"><i class="fas fa-redo me-2"></i>Nueva Frecuencia</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white shadow-sm">
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Tipo Intervalo *</label>
+                <select id="tipoIntervalo" class="form-select bg-secondary text-white border-0">
+                    <option value="diario">Diario</option>
+                    <option value="semanal">Semanal</option>
+                    <option value="mensual">Mensual</option>
+                    <option value="personalizado">Personalizado</option>
+                </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Días de la Semana</label><input type="text" id="diasSemana" class="form-control bg-secondary text-white border-0" placeholder="lunes,miercoles,viernes" /></div>
+            <div class="mb-3"><label class="form-label">Veces por Día</label><input type="number" id="vecesPorDia" class="form-control bg-secondary text-white border-0" value="1" min="1" /></div>
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="esPersonalizada" />
+                <label class="form-check-label" for="esPersonalizada">Es Personalizada</label>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-info" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <a href="/Frecuencias" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        async function guardar() {
+            const dias = document.getElementById('diasSemana').value;
+            const body = { tipoIntervalo: document.getElementById('tipoIntervalo').value, diasSemana: dias || null, vecesPorDia: parseInt(document.getElementById('vecesPorDia').value) || 1, esPersonalizada: document.getElementById('esPersonalizada').checked, estado: 1 };
+            const res = await fetch(API_URL + '/Frecuencias/Insertar', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok || res.status === 201) window.location.href = '/Frecuencias';
+            else mostrarAlerta('No se pudo guardar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+    </script>
+}

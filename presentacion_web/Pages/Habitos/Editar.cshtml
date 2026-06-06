@@ -1,0 +1,114 @@
+﻿@page
+@model PresentacionWeb.Pages.Habitos.EditarModel
+@{
+    ViewData["Title"] = "Editar Hábito";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4">✅ Editar Hábito</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white shadow-sm">
+        <div class="card-body">
+            <input type="hidden" id="id" />
+            <input type="hidden" id="usuario" />
+            <input type="hidden" id="fechaCreacion" />
+
+            <div class="mb-3">
+                <label class="form-label">Nombre *</label>
+                <input type="text" id="nombre" class="form-control bg-secondary text-white border-0" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Categoría ID</label>
+                <input type="number" id="categoria" class="form-control bg-secondary text-white border-0" min="1" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Frecuencia ID</label>
+                <input type="number" id="frecuencia" class="form-control bg-secondary text-white border-0" min="1" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label">XP Otorgada</label>
+                <input type="number" id="xpOtorgada" class="form-control bg-secondary text-white border-0" min="0" />
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-warning" onclick="guardar()"><i class="fas fa-save me-2"></i>Actualizar</button>
+                <a href="/Habitos" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        const id = new URLSearchParams(window.location.search).get('id');
+
+        async function cargar() {
+            const res = await fetch(API_URL + `/Habitos/ObtenerPorId/${id}`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!res.ok) {
+                mostrarAlerta('No se encontró el hábito.', 'danger');
+                return;
+            }
+
+            const d = await res.json();
+            document.getElementById('id').value = d.id;
+            document.getElementById('usuario').value = d.usuario;
+            document.getElementById('fechaCreacion').value = d.fechaCreacion;
+            document.getElementById('nombre').value = d.nombre ?? '';
+            document.getElementById('descripcion').value = d.descripcion ?? '';
+            document.getElementById('categoria').value = d.categoria ?? '';
+            document.getElementById('frecuencia').value = d.frecuencia ?? '';
+            document.getElementById('xpOtorgada').value = d.xpOtorgada ?? 0;
+        }
+
+        async function guardar() {
+            const cat = document.getElementById('categoria').value;
+            const frec = document.getElementById('frecuencia').value;
+
+            const body = {
+                id: parseInt(document.getElementById('id').value),
+                nombre: document.getElementById('nombre').value,
+                descripcion: document.getElementById('descripcion').value,
+                usuario: parseInt(document.getElementById('usuario').value),
+                categoria: cat ? parseInt(cat) : null,
+                frecuencia: frec ? parseInt(frec) : null,
+                xpOtorgada: parseInt(document.getElementById('xpOtorgada').value) || 0,
+                fechaCreacion: document.getElementById('fechaCreacion').value,
+                estado: 1
+            };
+
+            const res = await fetch(API_URL + '/Habitos/Actualizar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                window.location.href = '/Habitos';
+            } else {
+                mostrarAlerta('No se pudo actualizar.', 'danger');
+            }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+            const a = document.getElementById('alerta');
+            a.className = `alert alert-${tipo}`;
+            a.textContent = msg;
+            a.classList.remove('d-none');
+        }
+
+        cargar();
+    </script>
+}

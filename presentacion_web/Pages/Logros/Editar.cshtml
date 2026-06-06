@@ -1,0 +1,51 @@
+﻿@page
+@model PresentacionWeb.Pages.Logros.EditarModel
+@{
+    ViewData["Title"] = "Editar Logro";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4">🏆 Editar Logro</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white">
+        <div class="card-body">
+            <input type="hidden" id="id" />
+            <div class="mb-3"><label class="form-label">Título *</label><input type="text" id="titulo" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="mb-3"><label class="form-label">Descripción del Requisito</label><textarea id="descripcionRequisito" class="form-control bg-secondary text-white border-0" rows="3"></textarea></div>
+            <div class="mb-3"><label class="form-label">XP Otorgada</label><input type="number" id="xpOtorgada" class="form-control bg-secondary text-white border-0" min="0" /></div>
+            <div class="mb-4"><label class="form-label">URL Imagen</label><input type="text" id="imagenUrl" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-warning" onclick="guardar()"><i class="fas fa-save me-2"></i>Actualizar</button>
+                <a href="/Logros" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        const id = new URLSearchParams(window.location.search).get('id');
+        async function cargar() {
+            const res = await fetch(API_URL + `/Logros/ObtenerPorId/${id}`, { headers: { "Authorization": "Bearer " + token } });
+            const d = await res.json();
+            document.getElementById('id').value = d.id;
+            document.getElementById('titulo').value = d.titulo ?? '';
+            document.getElementById('descripcionRequisito').value = d.descripcionRequisito ?? '';
+            document.getElementById('xpOtorgada').value = d.xpOtorgada ?? 0;
+            document.getElementById('imagenUrl').value = d.imagenUrl ?? '';
+        }
+        async function guardar() {
+            const img = document.getElementById('imagenUrl').value;
+            const body = { id: parseInt(document.getElementById('id').value), titulo: document.getElementById('titulo').value, descripcionRequisito: document.getElementById('descripcionRequisito').value, xpOtorgada: parseInt(document.getElementById('xpOtorgada').value) || 0, imagenUrl: img || null, estado: 1 };
+            const res = await fetch(API_URL + '/Logros/Actualizar', { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok) window.location.href = '/Logros';
+            else mostrarAlerta('No se pudo actualizar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+        cargar();
+    </script>
+}

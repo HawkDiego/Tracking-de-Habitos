@@ -1,35 +1,72 @@
 ﻿@page
-@model presentacion_web.Pages.Grupos.IndexModel
+@model PresentacionWeb.Pages.Grupos.IndexModel
 @{
     ViewData["Title"] = "Grupos";
 }
+
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
 <div class="container-fluid py-4">
-    <div class="mb-4">
-        <h2 class="fw-bold text-white mb-0"><i class="fas fa-users-cog me-2"></i>Grupos</h2>
-        <p class="text-secondary mb-0">Grupos de hábitos colaborativos</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-white mb-0"><i class="fas fa-users-cog me-2"></i>Grupos</h2>
+            <p class="text-secondary mb-0">Grupos colaborativos</p>
+        </div>
+        <a href="/Grupos/Crear" class="btn btn-info"><i class="fas fa-plus me-2"></i>Nuevo Grupo</a>
     </div>
-    <div class="row g-3" id="listaGrupos"><div class="text-secondary">Cargando...</div></div>
+
+    <div id="alerta" class="alert d-none" role="alert"></div>
+
+    <div class="row g-3" id="listaGrupos">
+        <div class="col-12 text-secondary">Cargando...</div>
+    </div>
 </div>
+
 @section Scripts {
     <script>
+        const API_URL = "https://localhost:7293";
         const token = document.getElementById('jwtToken').value;
+
         async function cargar() {
             const c = document.getElementById("listaGrupos");
-            try {
-                const res = await fetch("http://localhost:5165/Grupos/Listar", { headers: { "Authorization": "Bearer " + token } });
-                const data = await res.json();
-                c.innerHTML = data.map(g => `
-                    <div class="col-md-4">
-                        <div class="card bg-dark border-secondary text-white h-100">
-                            <div class="card-body">
-                                <h5 class="fw-bold"><i class="fas fa-users me-2 text-info"></i>${g.nombre}</h5>
-                                <p class="text-secondary mb-2">${g.descripcion ?? '—'}</p>
-                                <small class="text-secondary">Administrador ID: ${g.administrador}</small>
+            const res = await fetch(API_URL + "/Grupos/Listar", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+
+            c.innerHTML = data.map(g => `
+                <div class="col-md-4">
+                    <div class="card bg-dark border-secondary text-white h-100">
+                        <div class="card-body">
+                            <h5 class="fw-bold"><i class="fas fa-users me-2 text-info"></i>${g.nombre}</h5>
+                            <p class="text-secondary mb-2">${g.descripcion ?? '—'}</p>
+                            <small class="text-secondary">Administrador ID: ${g.administrador}</small>
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="/Grupos/Editar?id=${g.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i> Editar</a>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${g.id})"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
-                    </div>`).join('');
-            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+                    </div>
+                </div>`).join('');
+        }
+
+        async function eliminar(id) {
+            if (!confirm('¿Eliminar este grupo?')) return;
+            const res = await fetch(API_URL + `/Grupos/Eliminar/${id}`, {
+                method: 'DELETE',
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const al = document.getElementById('alerta');
+            if (res.ok) {
+                al.className='alert alert-success';
+                al.textContent='Grupo eliminado.';
+                al.classList.remove('d-none');
+                cargar();
+            } else {
+                al.className='alert alert-danger';
+                al.textContent='No se pudo eliminar.';
+                al.classList.remove('d-none');
+            }
         }
         cargar();
     </script>

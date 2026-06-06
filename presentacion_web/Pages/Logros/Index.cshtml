@@ -1,36 +1,73 @@
 ﻿@page
-@model presentacion_web.Pages.Logros.IndexModel
+@model PresentacionWeb.Pages.Logros.IndexModel
 @{
     ViewData["Title"] = "Logros";
 }
+
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
 <div class="container-fluid py-4">
-    <div class="mb-4">
-        <h2 class="fw-bold text-white mb-0"><i class="fas fa-trophy me-2"></i>Logros</h2>
-        <p class="text-secondary mb-0">Logros disponibles en el sistema</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-white mb-0"><i class="fas fa-trophy me-2"></i>Logros</h2>
+            <p class="text-secondary mb-0">Logros del sistema</p>
+        </div>
+        <a href="/Logros/Crear" class="btn btn-info"><i class="fas fa-plus me-2"></i>Nuevo Logro</a>
     </div>
-    <div class="row g-3" id="listaLogros"><div class="text-secondary">Cargando...</div></div>
+
+    <div id="alerta" class="alert d-none" role="alert"></div>
+
+    <div class="row g-3" id="listaLogros">
+        <div class="text-secondary">Cargando...</div>
+    </div>
 </div>
+
 @section Scripts {
     <script>
+        const API_URL = "https://localhost:7293";
         const token = document.getElementById('jwtToken').value;
+
         async function cargar() {
             const c = document.getElementById("listaLogros");
-            try {
-                const res = await fetch("http://localhost:5165/Logros/Listar", { headers: { "Authorization": "Bearer " + token } });
-                const data = await res.json();
-                c.innerHTML = data.map(l => `
-                    <div class="col-md-4 col-lg-3">
-                        <div class="card bg-dark border-secondary text-white h-100">
-                            <div class="card-body text-center">
-                                <div style="font-size:2.5rem" class="mb-2">🏆</div>
-                                <h6 class="fw-bold">${l.titulo}</h6>
-                                <p class="text-secondary mb-2" style="font-size:0.85rem">${l.descripcionRequisito ?? ''}</p>
-                                <span class="badge bg-warning text-dark">${l.xpOtorgada} XP</span>
+            const res = await fetch(API_URL + "/Logros/Listar", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+
+            c.innerHTML = data.map(l => `
+                <div class="col-md-4 col-lg-3">
+                    <div class="card bg-dark border-secondary text-white h-100">
+                        <div class="card-body text-center">
+                            <div style="font-size:2.5rem" class="mb-2">🏆</div>
+                            <h6 class="fw-bold">${l.titulo}</h6>
+                            <p class="text-secondary mb-2" style="font-size:.85rem">${l.descripcionRequisito ?? ''}</p>
+                            <span class="badge bg-warning text-dark">${l.xpOtorgada} XP</span>
+                            <div class="d-flex gap-2 justify-content-center mt-3">
+                                <a href="/Logros/Editar?id=${l.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${l.id})"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
-                    </div>`).join('');
-            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+                    </div>
+                </div>`).join('');
+        }
+
+        async function eliminar(id) {
+            if (!confirm('¿Eliminar este logro?')) return;
+            const res = await fetch(API_URL + `/Logros/Eliminar/${id}`, {
+                method: 'DELETE',
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const al = document.getElementById('alerta');
+            if (res.ok) {
+                al.className='alert alert-success';
+                al.textContent='Logro eliminado.';
+                al.classList.remove('d-none');
+                cargar();
+            } else {
+                al.className='alert alert-danger';
+                al.textContent='No se pudo eliminar.';
+                al.classList.remove('d-none');
+            }
         }
         cargar();
     </script>

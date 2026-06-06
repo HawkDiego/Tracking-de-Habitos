@@ -1,0 +1,40 @@
+﻿@page
+@model PresentacionWeb.Pages.Logros.CrearModel
+@{
+    ViewData["Title"] = "Nuevo Logro";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4">🏆 Nuevo Logro</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white">
+        <div class="card-body">
+            <div class="mb-3"><label class="form-label">Título *</label><input type="text" id="titulo" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="mb-3"><label class="form-label">Descripción del Requisito</label><textarea id="descripcionRequisito" class="form-control bg-secondary text-white border-0" rows="3"></textarea></div>
+            <div class="mb-3"><label class="form-label">XP Otorgada</label><input type="number" id="xpOtorgada" class="form-control bg-secondary text-white border-0" value="50" min="0" /></div>
+            <div class="mb-4"><label class="form-label">URL Imagen</label><input type="text" id="imagenUrl" class="form-control bg-secondary text-white border-0" placeholder="https://..." /></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-info" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <a href="/Logros" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        async function guardar() {
+            const img = document.getElementById('imagenUrl').value;
+            const body = { titulo: document.getElementById('titulo').value, descripcionRequisito: document.getElementById('descripcionRequisito').value, xpOtorgada: parseInt(document.getElementById('xpOtorgada').value) || 0, imagenUrl: img || null, estado: 1 };
+            if (!body.titulo) { mostrarAlerta('El título es obligatorio.', 'danger'); return; }
+            const res = await fetch(API_URL + '/Logros/Insertar', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok || res.status === 201) window.location.href = '/Logros';
+            else mostrarAlerta('No se pudo guardar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+    </script>
+}

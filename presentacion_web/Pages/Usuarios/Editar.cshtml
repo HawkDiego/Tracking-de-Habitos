@@ -1,0 +1,111 @@
+﻿@page
+@model PresentacionWeb.Pages.Usuarios.EditarModel
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4">👤 Editar Usuario</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white">
+        <div class="card-body">
+            <input type="hidden" id="id" />
+            <input type="hidden" id="clave" />
+            <input type="hidden" id="fechaRegistro" />
+
+            <div class="mb-3">
+                <label class="form-label">Nombre *</label>
+                <input type="text" id="nombre" class="form-control bg-secondary text-white border-0" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" id="email" class="form-control bg-secondary text-white border-0" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nivel</label>
+                <select id="nivel" class="form-select bg-secondary text-white border-0">
+                    <option value="1">1 - Inicial</option>
+                    <option value="2">2 - Constante</option>
+                    <option value="3">3 - Comprometido</option>
+                    <option value="4">4 - Avanzado</option>
+                    <option value="5">5 - Elite</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">XP Total</label>
+                <input type="number" id="xpTotal" class="form-control bg-secondary text-white border-0" min="0" />
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-warning" onclick="guardar()"><i class="fas fa-save me-2"></i>Actualizar</button>
+                <a href="/Usuarios" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        const id = new URLSearchParams(window.location.search).get('id');
+
+        async function cargar() {
+            const res = await fetch(API_URL + `/Usuarios/ObtenerPorId/${id}`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!res.ok) {
+                mostrarAlerta('No se encontró el usuario.', 'danger');
+                return;
+            }
+
+            const d = await res.json();
+            document.getElementById('id').value = d.id;
+            document.getElementById('clave').value = d.clave ?? '';
+            document.getElementById('fechaRegistro').value = d.fechaRegistro;
+            document.getElementById('nombre').value = d.nombre ?? '';
+            document.getElementById('email').value = d.email ?? '';
+            document.getElementById('nivel').value = d.nivel ?? 1;
+            document.getElementById('xpTotal').value = d.xpTotal ?? 0;
+        }
+
+        async function guardar() {
+            const body = {
+                id: parseInt(document.getElementById('id').value),
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                clave: document.getElementById('clave').value,
+                fechaRegistro: document.getElementById('fechaRegistro').value,
+                nivel: parseInt(document.getElementById('nivel').value),
+                xpTotal: parseInt(document.getElementById('xpTotal').value) || 0,
+                estado: 1
+            };
+
+            const res = await fetch(API_URL + '/Usuarios/Actualizar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                window.location.href = '/Usuarios';
+            } else {
+                mostrarAlerta('No se pudo actualizar.', 'danger');
+            }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+            const a = document.getElementById('alerta');
+            a.className = `alert alert-${tipo}`;
+            a.textContent = msg;
+            a.classList.remove('d-none');
+        }
+
+        cargar();
+    </script>
+}

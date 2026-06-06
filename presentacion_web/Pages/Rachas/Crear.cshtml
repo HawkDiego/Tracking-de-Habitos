@@ -1,0 +1,63 @@
+﻿@page
+@model presentacion_web.Pages.Rachas.CrearModel
+@{
+    ViewData["Title"] = "Nueva Racha";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4">🔥 Nueva Racha</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white">
+        <div class="card-body">
+            <div class="mb-3"><label class="form-label">ID del Hábito *</label><input type="number" id="habito" class="form-control bg-secondary text-white border-0" min="1" /></div>
+            <div class="mb-3"><label class="form-label">Días Consecutivos *</label><input type="number" id="dias" class="form-control bg-secondary text-white border-0" value="1" min="1" /></div>
+            <div class="mb-3"><label class="form-label">Fecha de Inicio</label><input type="date" id="fechaInicio" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="mb-4"><label class="form-label">Última Fecha Registrada</label><input type="date" id="ultimaFecha" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <a href="/Rachas" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const token = document.getElementById('jwtToken').value;
+        const API_URL = "https://localhost:7293";
+
+        document.getElementById('fechaInicio').valueAsDate = new Date();
+        document.getElementById('ultimaFecha').valueAsDate = new Date();
+
+        async function guardar() {
+            const valInicio = document.getElementById('fechaInicio').value;
+            const valUltima = document.getElementById('ultimaFecha').value;
+
+            // Aquí está el arreglo mágico de la fecha para que C# no explote
+            const fechaInicioLimpia = valInicio ? valInicio + "T00:00:00" : new Date().toISOString().split('.')[0];
+            const ultimaFechaLimpia = valUltima ? valUltima + "T00:00:00" : new Date().toISOString().split('.')[0];
+
+            const body = {
+                habito: parseInt(document.getElementById('habito').value),
+                diasConsecutivos: parseInt(document.getElementById('dias').value) || 1,
+                fechaInicio: fechaInicioLimpia,
+                ultimaFecha: ultimaFechaLimpia,
+                estado: 1
+            };
+
+            if (!body.habito) { mostrarAlerta('El ID del hábito es obligatorio.', 'danger'); return; }
+
+            const res = await fetch(API_URL + '/Rachas/Insertar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok || res.status === 201) window.location.href = '/Rachas';
+            else mostrarAlerta('Error al guardar. Verifique que el Hábito sí exista.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+    </script>
+}

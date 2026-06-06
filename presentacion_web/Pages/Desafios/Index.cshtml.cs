@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-namespace presentacion_web.Pages.Desafios;
 
-public class IndexModel : PageModel
+namespace PresentacionWeb.Pages.Desafios
 {
-    public IActionResult OnGet()
+    public class IndexModel : PageModel
     {
-        if (string.IsNullOrEmpty(HttpContext.Session.GetString("JWToken")))
-            return RedirectToPage("/Login");
-        return Page();
+        public IActionResult OnGet()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("JWToken")))
+                return RedirectToPage("/Login");
+            return Page();
+        }
     }
 }

@@ -1,0 +1,38 @@
+﻿@page
+@model PresentacionWeb.Pages.Grupos.CrearModel
+@{
+    ViewData["Title"] = "Nuevo Grupo";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4"><i class="fas fa-users-cog me-2"></i>Nuevo Grupo</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white shadow-sm">
+        <div class="card-body">
+            <div class="mb-3"><label class="form-label">Nombre *</label><input type="text" id="nombre" class="form-control bg-secondary text-white border-0" /></div>
+            <div class="mb-3"><label class="form-label">Descripción</label><textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"></textarea></div>
+            <div class="mb-4"><label class="form-label">Administrador (ID de usuario) *</label><input type="number" id="administrador" class="form-control bg-secondary text-white border-0" value="1" min="1" /></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-info" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <a href="/Grupos" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        async function guardar() {
+            const body = { nombre: document.getElementById('nombre').value, descripcion: document.getElementById('descripcion').value, administrador: parseInt(document.getElementById('administrador').value), estado: 1 };
+            if (!body.nombre || !body.administrador) { mostrarAlerta('Nombre y administrador son obligatorios.', 'danger'); return; }
+            const res = await fetch(API_URL + '/Grupos/Insertar', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok || res.status === 201) window.location.href = '/Grupos';
+            else mostrarAlerta('No se pudo guardar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+    </script>
+}

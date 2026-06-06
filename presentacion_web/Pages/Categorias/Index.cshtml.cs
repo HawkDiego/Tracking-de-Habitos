@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace presentacion_web.Pages.Categorias;
-
-public class IndexModel : PageModel
+namespace PresentacionWeb.Pages.Categorias
 {
-    public IActionResult OnGet()
+    public class IndexModel : PageModel
     {
-        var token = HttpContext.Session.GetString("JWToken");
-        if (string.IsNullOrEmpty(token))
-            return RedirectToPage("/Login");
-
-        return Page();
+        public IActionResult OnGet()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("JWToken")))
+                return RedirectToPage("/Login");
+            return Page();
+        }
     }
 }

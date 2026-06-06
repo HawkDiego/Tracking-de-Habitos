@@ -3,36 +3,53 @@
 @{
     ViewData["Title"] = "Rachas";
 }
+
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
 <div class="container-fluid py-4">
-    <div class="mb-4">
-        <h2 class="fw-bold text-white mb-0"><i class="fas fa-fire me-2"></i>Rachas</h2>
-        <p class="text-secondary mb-0">Rachas activas de hábitos</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div><h2 class="fw-bold text-white mb-0"><i class="fas fa-fire text-danger me-2"></i>Rachas</h2></div>
+        <a href="/Rachas/Crear" class="btn btn-danger"><i class="fas fa-plus me-2"></i>Nueva Racha</a>
     </div>
-    <div class="table-responsive">
-        <table class="table table-dark table-bordered table-hover align-middle">
-            <thead><tr><th>#</th><th>Hábito</th><th>Racha actual</th><th>Máxima histórica</th><th>Multiplicador XP</th><th>Último incremento</th></tr></thead>
-            <tbody id="tablaRachas"><tr><td colspan="6" class="text-center text-secondary">Cargando...</td></tr></tbody>
-        </table>
-    </div>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="row g-3" id="listaRachas"><div class="col-12 text-secondary">Cargando...</div></div>
 </div>
+
 @section Scripts {
     <script>
         const token = document.getElementById('jwtToken').value;
+        const API_URL = "https://localhost:7293";
+
         async function cargar() {
-            const tbody = document.getElementById("tablaRachas");
+            const c = document.getElementById("listaRachas");
             try {
-                const res = await fetch("http://localhost:5165/Rachas/Listar", { headers: { "Authorization": "Bearer " + token } });
+                const res = await fetch(API_URL + "/Rachas/Listar", { headers: { "Authorization": "Bearer " + token } });
                 const data = await res.json();
-                tbody.innerHTML = data.map(r => `<tr>
-                    <td>${r.id}</td>
-                    <td>Hábito #${r.habito}</td>
-                    <td><span class="badge bg-danger">${r.conteoActual ?? 0} días</span></td>
-                    <td><span class="badge bg-warning text-dark">${r.maximaHistorica ?? 0} días</span></td>
-                    <td><span class="badge bg-success">x${r.multiplicadorXp ?? 1}</span></td>
-                    <td>${r.fechaUltimoIncremento ? new Date(r.fechaUltimoIncremento).toLocaleDateString('es-CO') : '—'}</td>
-                </tr>`).join('');
-            } catch(e) { tbody.innerHTML = '<tr><td colspan="6" class="text-danger text-center">Error al cargar.</td></tr>'; }
+                c.innerHTML = data.map(r => `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card bg-dark border-danger text-white h-100">
+                            <div class="card-body text-center">
+                                <div style="font-size:3rem" class="mb-2">🔥</div>
+                                <h5 class="fw-bold text-info">Hábito #${r.habito}</h5>
+                                <h2 class="text-warning fw-bold my-3">${r.diasConsecutivos} Días</h2>
+                                <p class="text-secondary mb-1" style="font-size:.85rem">Inició: ${new Date(r.fechaInicio).toLocaleDateString()}</p>
+                                <p class="text-secondary mb-3" style="font-size:.85rem">Última: ${new Date(r.ultimaFecha).toLocaleDateString()}</p>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a href="/Rachas/Editar?id=${r.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${r.id})"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+        }
+
+        async function eliminar(id) {
+            if (!confirm('¿Eliminar esta racha?')) return;
+            const res = await fetch(API_URL + `/Rachas/Eliminar/${id}`, { method: 'DELETE', headers: { "Authorization": "Bearer " + token } });
+            const al = document.getElementById('alerta');
+            if (res.ok) { al.className='alert alert-success'; al.textContent='Racha eliminada.'; al.classList.remove('d-none'); cargar(); }
+            else { al.className='alert alert-danger'; al.textContent='No se pudo eliminar.'; al.classList.remove('d-none'); }
         }
         cargar();
     </script>

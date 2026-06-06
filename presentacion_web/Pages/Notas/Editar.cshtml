@@ -1,0 +1,55 @@
+﻿@page
+@model PresentacionWeb.Pages.Notas.EditarModel
+@{
+    ViewData["Title"] = "Editar Nota";
+}
+
+<input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
+
+<div class="container py-4" style="max-width:600px">
+    <h2 class="fw-bold text-white mb-4"><i class="fas fa-sticky-note me-2"></i>Editar Nota</h2>
+    <div id="alerta" class="alert d-none" role="alert"></div>
+    <div class="card bg-dark border-secondary text-white shadow-sm">
+        <div class="card-body">
+            <input type="hidden" id="id" /><input type="hidden" id="fechaCreacion" />
+            <div class="mb-3"><label class="form-label">Texto</label><textarea id="texto" class="form-control bg-secondary text-white border-0" rows="4"></textarea></div>
+            <div class="mb-3"><label class="form-label">Estado de Ánimo (emoji)</label><input type="text" id="estadoDeAnimoEmoji" class="form-control bg-secondary text-white border-0" maxlength="10" /></div>
+            <div class="mb-3"><label class="form-label">ID Registro de Progreso</label><input type="number" id="registroProgreso" class="form-control bg-secondary text-white border-0" min="1" /></div>
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="esPrivada" />
+                <label class="form-check-label" for="esPrivada">Es Privada</label>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-warning" onclick="guardar()"><i class="fas fa-save me-2"></i>Actualizar</button>
+                <a href="/Notas" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const API_URL = "https://localhost:7293";
+        const token = document.getElementById('jwtToken').value;
+        const id = new URLSearchParams(window.location.search).get('id');
+        async function cargar() {
+            const res = await fetch(API_URL + `/Notas/ObtenerPorId/${id}`, { headers: { "Authorization": "Bearer " + token } });
+            const d = await res.json();
+            document.getElementById('id').value = d.id;
+            document.getElementById('fechaCreacion').value = d.fechaCreacion;
+            document.getElementById('texto').value = d.texto ?? '';
+            document.getElementById('estadoDeAnimoEmoji').value = d.estadoDeAnimoEmoji ?? '';
+            document.getElementById('registroProgreso').value = d.registroProgreso ?? '';
+            document.getElementById('esPrivada').checked = d.esPrivada;
+        }
+        async function guardar() {
+            const rp = document.getElementById('registroProgreso').value;
+            const body = { id: parseInt(document.getElementById('id').value), texto: document.getElementById('texto').value, estadoDeAnimoEmoji: document.getElementById('estadoDeAnimoEmoji').value || null, esPrivada: document.getElementById('esPrivada').checked, registroProgreso: rp ? parseInt(rp) : null, fechaCreacion: document.getElementById('fechaCreacion').value, estado: 1 };
+            const res = await fetch(API_URL + '/Notas/Actualizar', { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+            if (res.ok) window.location.href = '/Notas';
+            else mostrarAlerta('No se pudo actualizar.', 'danger');
+        }
+        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+        cargar();
+    </script>
+}

@@ -1,5 +1,5 @@
 ﻿@page
-@model presentacion_web.Pages.Usuarios.IndexModel
+@model PresentacionWeb.Pages.Usuarios.IndexModel
 @{
     ViewData["Title"] = "Usuarios";
 }
@@ -7,80 +7,82 @@
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
 
 <div class="container-fluid py-4">
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-white mb-0">👤 Usuarios</h2>
             <p class="text-secondary mb-0">Usuarios registrados en el sistema</p>
         </div>
+        <a href="/Usuarios/Crear" class="btn btn-info"><i class="fas fa-plus me-2"></i>Nuevo Usuario</a>
     </div>
+
+    <div id="alerta" class="alert d-none" role="alert"></div>
 
     <div class="row g-3" id="listaUsuarios">
         <div class="col-12 text-secondary">Cargando...</div>
     </div>
-
 </div>
 
 @section Scripts {
     <script>
+        const API_URL = "https://localhost:7293";
         const token = document.getElementById('jwtToken').value;
-        const api = "http://localhost:5165";
+        const niveles = ['', 'Inicial', 'Constante', 'Comprometido', 'Avanzado', 'Elite'];
+        const colores = ['', 'secondary', 'info', 'primary', 'warning', 'danger'];
 
-        async function cargarUsuarios() {
-            const contenedor = document.getElementById("listaUsuarios");
+        async function cargar() {
+            const c = document.getElementById("listaUsuarios");
             try {
-                const res = await fetch(api + "/Usuarios/Listar", {
+                const res = await fetch(API_URL + "/Usuarios/Listar", {
                     headers: { "Authorization": "Bearer " + token }
                 });
+                const data = await res.json();
 
-                if (!res.ok) {
-                    contenedor.innerHTML = `<div class="text-danger">Error ${res.status} al cargar usuarios.</div>`;
-                    return;
-                }
-
-                const usuarios = await res.json();
-
-                if (usuarios.length === 0) {
-                    contenedor.innerHTML = '<div class="text-secondary">No hay usuarios registrados.</div>';
-                    return;
-                }
-
-                const niveles = ['', 'Inicial', 'Constante', 'Comprometido', 'Avanzado', 'Elite'];
-                const colores = ['', 'secondary', 'info', 'primary', 'warning', 'danger'];
-
-                contenedor.innerHTML = usuarios.map(u => {
-                    const iniciales = u.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-                    const nivel = niveles[u.nivel] ?? 'Sin nivel';
-                    const color = colores[u.nivel] ?? 'secondary';
+                c.innerHTML = data.map(u => {
+                    const ini = (u.nombre || 'U').split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
                     return `
-                        <div class="col-md-4 col-lg-3">
-                            <div class="card bg-dark border-secondary text-white h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center fw-bold"
-                                             style="width:48px;height:48px;font-size:1.1rem;flex-shrink:0">
-                                            ${iniciales}
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0 fw-bold">${u.nombre}</h6>
-                                            <small class="text-secondary">${u.email}</small>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="badge bg-${color}">${nivel}</span>
-                                        <span class="text-warning fw-bold">${u.xpTotal ?? 0} XP</span>
-                                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center fw-bold" style="width:48px;height:48px;font-size:1.1rem;flex-shrink:0">${ini}</div>
+                                    <div><h6 class="mb-0 fw-bold">${u.nombre}</h6><small class="text-secondary">${u.email}</small></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-${colores[u.nivel] ?? 'secondary'}">${niveles[u.nivel] ?? 'Sin nivel'}</span>
+                                    <span class="text-warning fw-bold">${u.xpTotal ?? 0} XP</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="/Usuarios/Editar?id=${u.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i> Editar</a>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${u.id})"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
-                    `;
+                    </div>`;
                 }).join('');
-
-            } catch (e) {
-                contenedor.innerHTML = '<div class="text-danger">No se pudo conectar con la API.</div>';
+            } catch(e) {
+                c.innerHTML = '<div class="text-danger">Error al cargar.</div>';
             }
         }
 
-        cargarUsuarios();
+        async function eliminar(id) {
+            if (!confirm('¿Eliminar este usuario?')) return;
+            const res = await fetch(API_URL + `/Usuarios/Eliminar/${id}`, {
+                method: 'DELETE',
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const al = document.getElementById('alerta');
+            if (res.ok) {
+                al.className='alert alert-success';
+                al.textContent='Usuario eliminado.';
+                al.classList.remove('d-none');
+                cargar();
+            } else {
+                al.className='alert alert-danger';
+                al.textContent='No se pudo eliminar.';
+                al.classList.remove('d-none');
+            }
+        }
+
+        cargar();
     </script>
 }
