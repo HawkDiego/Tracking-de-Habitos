@@ -45,11 +45,10 @@ namespace presentacion_web.Pages
             public int? Nivel { get; set; }
         }
 
+       
         public IActionResult OnGet()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("JWToken")))
-                return RedirectToPage("Index");
-
+            HttpContext.Session.Clear();
             MensajeError = string.Empty;
             return Page();
         }

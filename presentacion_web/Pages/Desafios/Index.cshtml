@@ -9,10 +9,14 @@
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-white mb-0"><i class="fas fa-bullseye text-danger me-2"></i>Desafíos</h2>
+            <h2 class="fw-bold text-white mb-0">
+                <i class="fas fa-bullseye text-danger me-2"></i>Desafíos
+            </h2>
             <p class="text-secondary mb-0">Retos globales para los usuarios</p>
         </div>
-        <a href="/Desafios/Crear" class="btn btn-info"><i class="fas fa-plus me-2"></i>Nuevo Desafío</a>
+        <a href="/Desafios/Crear" class="btn btn-info">
+            <i class="fas fa-plus me-2"></i>Nuevo Desafío
+        </a>
     </div>
 
     <div id="alerta" class="alert d-none" role="alert"></div>
@@ -29,44 +33,97 @@
 
         async function cargar() {
             const c = document.getElementById("listaDesafios");
-            const res = await fetch(API_URL + "/Desafios/Listar", { headers: { "Authorization": "Bearer " + token } });
-            const data = await res.json();
+            try {
+                const res = await fetch(API_URL + "/Desafios/Listar", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const data = await res.json();
 
-            c.innerHTML = data.map(d => `
-                <div class="col-md-4">
-                    <div class="card bg-dark border-secondary text-white h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="fw-bold text-info"><i class="fas fa-flag-checkered me-2"></i>${d.nombre || d.titulo}</h5>
-                                <span class="badge bg-warning text-dark">${d.xpRecompensa ?? d.xpOtorgada ?? 0} XP</span>
-                            </div>
-                            <p class="text-secondary mb-3" style="font-size:0.9rem">${d.descripcion ?? 'Sin descripción'}</p>
+                if (!data.length) {
+                    c.innerHTML = '<div class="col-12 text-secondary">Sin desafíos registrados.</div>';
+                    return;
+                }
 
-                            <div class="mb-3 p-2 bg-secondary rounded text-center" style="font-size:0.85rem">
-                                <div class="text-white"><strong>Inicio:</strong> ${new Date(d.fechaInicio).toLocaleDateString('es-CO')}</div>
-                                <div class="text-warning"><strong>Fin:</strong> ${new Date(d.fechaFin).toLocaleDateString('es-CO')}</div>
-                            </div>
+                const hoy = new Date();
 
-                            <div class="d-flex gap-2">
-                                <a href="/Desafios/Editar?id=${d.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i> Editar</a>
-                                <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${d.id})"><i class="fas fa-trash"></i></button>
+                c.innerHTML = data.map(d => {
+                    const inicio = new Date(d.fechaInicio);
+                    const fin = new Date(d.fechaFin);
+                    const activo = hoy >= inicio && hoy <= fin;
+                    const badgeEstado = activo
+                        ? '<span class="badge bg-success">Activo</span>'
+                        : hoy > fin
+                            ? '<span class="badge bg-secondary">Finalizado</span>'
+                            : '<span class="badge bg-info text-dark">Próximo</span>';
+
+                    return `
+                    <div class="col-md-4">
+                        <div class="card bg-dark border-secondary text-white h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="fw-bold text-info mb-0">
+                                        <i class="fas fa-flag-checkered me-2"></i>${d.nombre}
+                                    </h5>
+                                    <span class="badge bg-warning text-dark ms-2">${d.xpBono ?? 0} XP</span>
+                                </div>
+
+                                <div class="mb-2">${badgeEstado}</div>
+
+                                <p class="text-secondary mb-3" style="font-size:0.9rem">
+                                    ${d.descripcion ?? 'Sin descripción'}
+                                </p>
+
+                                <div class="mb-3 p-2 bg-secondary rounded" style="font-size:0.85rem">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-white-50">Grupo Admin:</span>
+                                        <span class="fw-bold">#${d.grupoAdministrador}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <span class="text-white-50">Inicio:</span>
+                                        <span>${inicio.toLocaleDateString('es-CO')}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <span class="text-white-50">Fin:</span>
+                                        <span class="text-warning">${fin.toLocaleDateString('es-CO')}</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a href="/Desafios/Editar?id=${d.id}" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${d.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`).join('');
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                c.innerHTML = '<div class="col-12 text-danger">Error al cargar los desafíos.</div>';
+            }
         }
 
         async function eliminar(id) {
             if (!confirm('¿Eliminar este desafío?')) return;
-            const res = await fetch(API_URL + `/Desafios/Eliminar/${id}`, { method: 'DELETE', headers: { "Authorization": "Bearer " + token } });
+            const res = await fetch(API_URL + `/Desafios/Eliminar/${id}`, {
+                method: 'DELETE',
+                headers: { "Authorization": "Bearer " + token }
+            });
             const al = document.getElementById('alerta');
             if (res.ok) {
-                al.className='alert alert-success'; al.textContent='Desafío eliminado.'; al.classList.remove('d-none');
+                al.className = 'alert alert-success';
+                al.textContent = 'Desafío eliminado.';
+                al.classList.remove('d-none');
                 cargar();
             } else {
-                al.className='alert alert-danger'; al.textContent='Error al eliminar.'; al.classList.remove('d-none');
+                al.className = 'alert alert-danger';
+                al.textContent = 'Error al eliminar.';
+                al.classList.remove('d-none');
             }
         }
+
         cargar();
     </script>
 }

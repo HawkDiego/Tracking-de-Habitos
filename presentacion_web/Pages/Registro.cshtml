@@ -1,0 +1,202 @@
+﻿@page
+@model presentacion_web.Pages.RegistroModel
+@{
+    ViewData["Title"] = "Registro";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackHabit — Registro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-dark d-flex align-items-center justify-content-center" style="min-height:100vh;">
+
+    <div class="card bg-dark text-white shadow-lg p-4"
+         style="width:100%;max-width:440px;border-radius:16px;border:1px solid #2d3748;">
+
+        <div class="text-center mb-4">
+            <i class="fas fa-user-plus fa-3x text-info mb-3"></i>
+            <h3 class="fw-bold">Crear cuenta</h3>
+            <p class="text-white-50 small">Completa los datos para registrarte</p>
+        </div>
+
+        <div id="alerta" class="alert d-none small" role="alert"></div>
+
+        <div class="mb-3">
+            <label class="form-label text-white-50 small">Nombre completo *</label>
+            <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text" id="nombre" class="form-control bg-secondary text-white border-0"
+                       placeholder="Juan Pérez" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-white-50 small">Correo electrónico *</label>
+            <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <input type="email" id="email" class="form-control bg-secondary text-white border-0"
+                       placeholder="correo@ejemplo.com" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-white-50 small">Contraseña *</label>
+            <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <input type="password" id="clave" class="form-control bg-secondary text-white border-0"
+                       placeholder="••••••••" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-white-50 small">Tipo de cuenta *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check flex-fill p-3 rounded"
+                     style="background:#2d3748;cursor:pointer;border:1px solid #0dcaf0"
+                     id="cardCliente" onclick="seleccionarRol('cliente')">
+                    <input class="form-check-input" type="radio" name="rol"
+                           id="rolCliente" value="cliente" checked />
+                    <label class="form-check-label text-white w-100" for="rolCliente"
+                           style="cursor:pointer">
+                        <i class="fas fa-user text-info me-2"></i>
+                        <strong>Cliente</strong>
+                        <div class="text-white-50 small mt-1">Seguimiento personal de hábitos</div>
+                    </label>
+                </div>
+                <div class="form-check flex-fill p-3 rounded"
+                     style="background:#2d3748;cursor:pointer;border:none"
+                     id="cardAdmin" onclick="seleccionarRol('admin')">
+                    <input class="form-check-input" type="radio" name="rol"
+                           id="rolAdmin" value="admin" />
+                    <label class="form-check-label text-white w-100" for="rolAdmin"
+                           style="cursor:pointer">
+                        <i class="fas fa-crown text-warning me-2"></i>
+                        <strong>Administrador</strong>
+                        <div class="text-white-50 small mt-1">Gestión de grupos y desafíos</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="campoCodigoAdmin" class="mb-4 d-none">
+            <label class="form-label text-white-50 small">
+                <i class="fas fa-key text-warning me-1"></i>Código de administrador *
+            </label>
+            <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-warning">
+                    <i class="fas fa-shield-alt"></i>
+                </span>
+                <input type="password" id="codigoAdmin"
+                       class="form-control bg-secondary text-white border-0"
+                       placeholder="Ingresa el código secreto" />
+            </div>
+            <div class="form-text text-warning small">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                Solo personal autorizado puede crear cuentas de administrador.
+            </div>
+        </div>
+
+        <button class="btn btn-info w-100 fw-bold py-2 mb-3" onclick="registrar()">
+            <i class="fas fa-user-plus me-2"></i>Crear cuenta
+        </button>
+
+        <p class="text-center text-white-50 small mb-0">
+            ¿Ya tienes cuenta?
+            <a href="/Login" class="text-info fw-bold text-decoration-none">Inicia sesión</a>
+        </p>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = "https://localhost:7293";
+        const CODIGO_ADMIN = "TrackAdmin2026";
+
+        function seleccionarRol(rol) {
+        document.getElementById('rolCliente').checked = rol === 'cliente';
+        document.getElementById('rolAdmin').checked   = rol === 'admin';
+        document.getElementById('cardCliente').style.border =
+        rol === 'cliente' ? '1px solid #0dcaf0' : 'none';
+        document.getElementById('cardAdmin').style.border =
+        rol === 'admin' ? '1px solid #ffc107' : 'none';
+
+        const campoAdmin = document.getElementById('campoCodigoAdmin');
+        if (rol === 'admin') {
+        campoAdmin.classList.remove('d-none');
+        } else {
+        campoAdmin.classList.add('d-none');
+        document.getElementById('codigoAdmin').value = '';
+        }
+        }
+
+        async function registrar() {
+        const nombre  = document.getElementById('nombre').value.trim();
+        const email   = document.getElementById('email').value.trim();
+        const clave   = document.getElementById('clave').value;
+        const esAdmin = document.getElementById('rolAdmin').checked;
+
+        if (!nombre || !email || !clave) {
+        mostrarAlerta('Todos los campos son obligatorios.', 'danger');
+        return;
+        }
+
+        if (esAdmin) {
+        const codigoIngresado = document.getElementById('codigoAdmin').value;
+        if (codigoIngresado !== CODIGO_ADMIN) {
+        mostrarAlerta('Código de administrador incorrecto.', 'danger');
+        return;
+        }
+        }
+
+        const body = {
+        nombre: nombre,
+        email: email,
+        clave: clave,
+        nivel: 1,
+        configuracion: 1,
+        xpTotal: 0,
+        fechaRegistro: new Date().toISOString(),
+        estado: 1
+        };
+
+        try {
+        const res = await fetch(API_URL + '/Usuarios/Insertar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+        });
+
+        if (res.ok || res.status === 201) {
+        mostrarAlerta('¡Cuenta creada! Redirigiendo al login...', 'success');
+        setTimeout(() => window.location.href = '/Login', 1500);
+        } else {
+        const err = await res.json().catch(() => ({}));
+        mostrarAlerta(err.detail || 'No se pudo crear la cuenta. El email puede estar en uso.', 'danger');
+        }
+        } catch (e) {
+        mostrarAlerta('No se pudo conectar con el servidor.', 'danger');
+        }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+        const a = document.getElementById('alerta');
+        a.className = `alert alert-${tipo} small`;
+        a.textContent = msg;
+        a.classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>

@@ -8,11 +8,18 @@
 
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div><h2 class="fw-bold text-white mb-0"><i class="fas fa-fire text-danger me-2"></i>Rachas</h2></div>
+        <div>
+            <h2 class="fw-bold text-white mb-0"><i class="fas fa-fire text-danger me-2"></i>Rachas</h2>
+            <p class="text-secondary mb-0">Seguimiento de rachas por hábito</p>
+        </div>
         <a href="/Rachas/Crear" class="btn btn-danger"><i class="fas fa-plus me-2"></i>Nueva Racha</a>
     </div>
+
     <div id="alerta" class="alert d-none" role="alert"></div>
-    <div class="row g-3" id="listaRachas"><div class="col-12 text-secondary">Cargando...</div></div>
+
+    <div class="row g-3" id="listaRachas">
+        <div class="col-12 text-secondary">Cargando...</div>
+    </div>
 </div>
 
 @section Scripts {
@@ -23,34 +30,86 @@
         async function cargar() {
             const c = document.getElementById("listaRachas");
             try {
-                const res = await fetch(API_URL + "/Rachas/Listar", { headers: { "Authorization": "Bearer " + token } });
+                const res = await fetch(API_URL + "/Rachas/Listar", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
                 const data = await res.json();
-                c.innerHTML = data.map(r => `
+
+                if (!data.length) {
+                    c.innerHTML = '<div class="col-12 text-secondary">Sin rachas registradas.</div>';
+                    return;
+                }
+
+                c.innerHTML = data.map(r => {
+                    const multiplicador = r.multiplicadorXp ?? 1.0;
+                    const multiplicadorColor = multiplicador >= 1.3 ? 'text-warning' : multiplicador >= 1.1 ? 'text-info' : 'text-secondary';
+                    const fechaUltimo = r.fechaUltimoIncremento
+                        ? new Date(r.fechaUltimoIncremento).toLocaleDateString('es-CO')
+                        : '—';
+
+                    return `
                     <div class="col-md-4 col-lg-3">
                         <div class="card bg-dark border-danger text-white h-100">
                             <div class="card-body text-center">
                                 <div style="font-size:3rem" class="mb-2">🔥</div>
-                                <h5 class="fw-bold text-info">Hábito #${r.habito}</h5>
-                                <h2 class="text-warning fw-bold my-3">${r.diasConsecutivos} Días</h2>
-                                <p class="text-secondary mb-1" style="font-size:.85rem">Inició: ${new Date(r.fechaInicio).toLocaleDateString()}</p>
-                                <p class="text-secondary mb-3" style="font-size:.85rem">Última: ${new Date(r.ultimaFecha).toLocaleDateString()}</p>
+                                <h5 class="fw-bold text-info mb-1">Hábito #${r.habito}</h5>
+
+                                <div class="my-3">
+                                    <div class="text-warning fw-bold" style="font-size:2rem">${r.conteoActual ?? 0}</div>
+                                    <small class="text-secondary">días consecutivos</small>
+                                </div>
+
+                                <div class="d-flex justify-content-around mb-3 px-2">
+                                    <div class="text-center">
+                                        <div class="fw-bold text-success">${r.maximaHistorica ?? 0}</div>
+                                        <small class="text-secondary" style="font-size:.75rem">Máximo</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="fw-bold ${multiplicadorColor}">x${multiplicador.toFixed(2)}</div>
+                                        <small class="text-secondary" style="font-size:.75rem">XP Mult.</small>
+                                    </div>
+                                </div>
+
+                                <p class="text-secondary mb-3" style="font-size:.8rem">
+                                    <i class="fas fa-calendar-check me-1"></i>Último: ${fechaUltimo}
+                                </p>
+
                                 <div class="d-flex gap-2 justify-content-center">
-                                    <a href="/Rachas/Editar?id=${r.id}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${r.id})"><i class="fas fa-trash"></i></button>
+                                    <a href="/Rachas/Editar?id=${r.id}" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminar(${r.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>`).join('');
-            } catch(e) { c.innerHTML = '<div class="text-danger">Error al cargar.</div>'; }
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                c.innerHTML = '<div class="col-12 text-danger">Error al cargar las rachas.</div>';
+            }
         }
 
         async function eliminar(id) {
             if (!confirm('¿Eliminar esta racha?')) return;
-            const res = await fetch(API_URL + `/Rachas/Eliminar/${id}`, { method: 'DELETE', headers: { "Authorization": "Bearer " + token } });
+            const res = await fetch(API_URL + `/Rachas/Eliminar/${id}`, {
+                method: 'DELETE',
+                headers: { "Authorization": "Bearer " + token }
+            });
             const al = document.getElementById('alerta');
-            if (res.ok) { al.className='alert alert-success'; al.textContent='Racha eliminada.'; al.classList.remove('d-none'); cargar(); }
-            else { al.className='alert alert-danger'; al.textContent='No se pudo eliminar.'; al.classList.remove('d-none'); }
+            if (res.ok) {
+                al.className = 'alert alert-success';
+                al.textContent = 'Racha eliminada.';
+                al.classList.remove('d-none');
+                cargar();
+            } else {
+                al.className = 'alert alert-danger';
+                al.textContent = 'No se pudo eliminar.';
+                al.classList.remove('d-none');
+            }
         }
+
         cargar();
     </script>
 }

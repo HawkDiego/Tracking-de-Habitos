@@ -11,12 +11,38 @@
     <div id="alerta" class="alert d-none" role="alert"></div>
     <div class="card bg-dark border-secondary text-white">
         <div class="card-body">
-            <div class="mb-3"><label class="form-label">ID del Hábito *</label><input type="number" id="habito" class="form-control bg-secondary text-white border-0" min="1" /></div>
-            <div class="mb-3"><label class="form-label">Días Consecutivos *</label><input type="number" id="dias" class="form-control bg-secondary text-white border-0" value="1" min="1" /></div>
-            <div class="mb-3"><label class="form-label">Fecha de Inicio</label><input type="date" id="fechaInicio" class="form-control bg-secondary text-white border-0" /></div>
-            <div class="mb-4"><label class="form-label">Última Fecha Registrada</label><input type="date" id="ultimaFecha" class="form-control bg-secondary text-white border-0" /></div>
+
+            <div class="mb-3">
+                <label class="form-label">ID del Hábito *</label>
+                <input type="number" id="habito" class="form-control bg-secondary text-white border-0" min="1" placeholder="Ej: 1" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Conteo Actual (días consecutivos)</label>
+                <input type="number" id="conteoActual" class="form-control bg-secondary text-white border-0" value="1" min="0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Máxima Histórica</label>
+                <input type="number" id="maximaHistorica" class="form-control bg-secondary text-white border-0" value="1" min="0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha Último Incremento</label>
+                <input type="date" id="fechaUltimoIncremento" class="form-control bg-secondary text-white border-0" />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Multiplicador XP</label>
+                <input type="number" id="multiplicadorXp" class="form-control bg-secondary text-white border-0"
+                       value="1.00" min="1.00" max="5.00" step="0.05" />
+                <div class="form-text text-secondary">Por ejemplo: 1.00, 1.10, 1.30</div>
+            </div>
+
             <div class="d-flex gap-2">
-                <button class="btn btn-danger" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <button class="btn btn-danger" onclick="guardar()">
+                    <i class="fas fa-save me-2"></i>Guardar
+                </button>
                 <a href="/Rachas" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </div>
@@ -28,36 +54,48 @@
         const token = document.getElementById('jwtToken').value;
         const API_URL = "https://localhost:7293";
 
-        document.getElementById('fechaInicio').valueAsDate = new Date();
-        document.getElementById('ultimaFecha').valueAsDate = new Date();
+        // Prellenar fecha con hoy
+        document.getElementById('fechaUltimoIncremento').valueAsDate = new Date();
 
         async function guardar() {
-            const valInicio = document.getElementById('fechaInicio').value;
-            const valUltima = document.getElementById('ultimaFecha').value;
+            const habitoVal = parseInt(document.getElementById('habito').value);
+            if (!habitoVal || habitoVal < 1) {
+                mostrarAlerta('El ID del hábito es obligatorio.', 'danger');
+                return;
+            }
 
-            // Aquí está el arreglo mágico de la fecha para que C# no explote
-            const fechaInicioLimpia = valInicio ? valInicio + "T00:00:00" : new Date().toISOString().split('.')[0];
-            const ultimaFechaLimpia = valUltima ? valUltima + "T00:00:00" : new Date().toISOString().split('.')[0];
+            const fechaVal = document.getElementById('fechaUltimoIncremento').value;
 
             const body = {
-                habito: parseInt(document.getElementById('habito').value),
-                diasConsecutivos: parseInt(document.getElementById('dias').value) || 1,
-                fechaInicio: fechaInicioLimpia,
-                ultimaFecha: ultimaFechaLimpia,
+                habito: habitoVal,
+                conteoActual: parseInt(document.getElementById('conteoActual').value) || 1,
+                maximaHistorica: parseInt(document.getElementById('maximaHistorica').value) || 1,
+                fechaUltimoIncremento: fechaVal ? fechaVal + "T00:00:00" : new Date().toISOString().split('.')[0],
+                multiplicadorXp: parseFloat(document.getElementById('multiplicadorXp').value) || 1.00,
                 estado: 1
             };
 
-            if (!body.habito) { mostrarAlerta('El ID del hábito es obligatorio.', 'danger'); return; }
-
             const res = await fetch(API_URL + '/Rachas/Insertar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
                 body: JSON.stringify(body)
             });
 
-            if (res.ok || res.status === 201) window.location.href = '/Rachas';
-            else mostrarAlerta('Error al guardar. Verifique que el Hábito sí exista.', 'danger');
+            if (res.ok || res.status === 201) {
+                window.location.href = '/Rachas';
+            } else {
+                mostrarAlerta('Error al guardar. Verifique que el Hábito exista.', 'danger');
+            }
         }
-        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+
+        function mostrarAlerta(msg, tipo) {
+            const a = document.getElementById('alerta');
+            a.className = `alert alert-${tipo}`;
+            a.textContent = msg;
+            a.classList.remove('d-none');
+        }
     </script>
 }

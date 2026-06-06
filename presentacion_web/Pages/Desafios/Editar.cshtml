@@ -7,13 +7,30 @@
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
 
 <div class="container py-4" style="max-width:600px">
-    <h2 class="fw-bold text-white mb-4"><i class="fas fa-bullseye text-danger me-2"></i>Editar Desafío</h2>
+    <h2 class="fw-bold text-white mb-4">
+        <i class="fas fa-bullseye text-danger me-2"></i>Editar Desafío
+    </h2>
     <div id="alerta" class="alert d-none" role="alert"></div>
     <div class="card bg-dark border-secondary text-white shadow-sm">
         <div class="card-body">
             <input type="hidden" id="id" />
-            <div class="mb-3"><label class="form-label">Título / Nombre *</label><input type="text" id="titulo" class="form-control bg-secondary text-white border-0" /></div>
-            <div class="mb-3"><label class="form-label">Descripción</label><textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"></textarea></div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre *</label>
+                <input type="text" id="nombre" class="form-control bg-secondary text-white border-0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Grupo Administrador (ID) *</label>
+                <input type="number" id="grupoAdministrador" class="form-control bg-secondary text-white border-0" min="1" />
+                <div class="form-text text-secondary">ID del grupo que administra este desafío.</div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col-6">
                     <label class="form-label">Fecha Inicio</label>
@@ -24,10 +41,17 @@
                     <input type="date" id="fechaFin" class="form-control bg-secondary text-white border-0" />
                 </div>
             </div>
-            <div class="mb-4"><label class="form-label">XP de Recompensa</label><input type="number" id="xpRecompensa" class="form-control bg-secondary text-white border-0" min="0" /></div>
+
+            <div class="mb-4">
+                <label class="form-label">XP Bono</label>
+                <input type="number" id="xpBono" class="form-control bg-secondary text-white border-0" min="0" />
+                <div class="form-text text-secondary">XP que se otorga al completar el desafío.</div>
+            </div>
 
             <div class="d-flex gap-2">
-                <button class="btn btn-warning" onclick="guardar()"><i class="fas fa-save me-2"></i>Actualizar</button>
+                <button class="btn btn-warning" onclick="guardar()">
+                    <i class="fas fa-save me-2"></i>Actualizar
+                </button>
                 <a href="/Desafios" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </div>
@@ -41,42 +65,70 @@
         const id = new URLSearchParams(window.location.search).get('id');
 
         async function cargar() {
-            const res = await fetch(API_URL + `/Desafios/ObtenerPorId/${id}`, { headers: { "Authorization": "Bearer " + token } });
+            const res = await fetch(API_URL + `/Desafios/ObtenerPorId/${id}`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!res.ok) {
+                mostrarAlerta('No se encontró el desafío.', 'danger');
+                return;
+            }
+
             const d = await res.json();
-
             document.getElementById('id').value = d.id;
-            document.getElementById('titulo').value = d.nombre || d.titulo || '';
+            document.getElementById('nombre').value = d.nombre ?? '';
             document.getElementById('descripcion').value = d.descripcion ?? '';
-            document.getElementById('xpRecompensa').value = d.xpRecompensa ?? d.xpOtorgada ?? 0;
+            document.getElementById('grupoAdministrador').value = d.grupoAdministrador;
+            document.getElementById('xpBono').value = d.xpBono ?? 0;
 
-            if(d.fechaInicio) document.getElementById('fechaInicio').value = d.fechaInicio.split('T')[0];
-            if(d.fechaFin) document.getElementById('fechaFin').value = d.fechaFin.split('T')[0];
+            if (d.fechaInicio) document.getElementById('fechaInicio').value = d.fechaInicio.split('T')[0];
+            if (d.fechaFin)    document.getElementById('fechaFin').value    = d.fechaFin.split('T')[0];
         }
 
         async function guardar() {
+            const nombre = document.getElementById('nombre').value.trim();
+            if (!nombre) {
+                mostrarAlerta('El nombre es obligatorio.', 'danger');
+                return;
+            }
+
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin    = document.getElementById('fechaFin').value;
+
             const body = {
                 id: parseInt(document.getElementById('id').value),
-                titulo: document.getElementById('titulo').value,
-                nombre: document.getElementById('titulo').value,
-                descripcion: document.getElementById('descripcion').value,
-                fechaInicio: new Date(document.getElementById('fechaInicio').value).toISOString(),
-                fechaFin: new Date(document.getElementById('fechaFin').value).toISOString(),
-                xpRecompensa: parseInt(document.getElementById('xpRecompensa').value) || 0,
-                xpOtorgada: parseInt(document.getElementById('xpRecompensa').value) || 0,
+                nombre: nombre,
+                descripcion: document.getElementById('descripcion').value || null,
+                grupoAdministrador: parseInt(document.getElementById('grupoAdministrador').value),
+                fechaInicio: fechaInicio ? fechaInicio + "T00:00:00" : null,
+                fechaFin:    fechaFin    ? fechaFin    + "T00:00:00" : null,
+                xpBono: parseInt(document.getElementById('xpBono').value) || 0,
                 estado: 1
             };
 
             const res = await fetch(API_URL + '/Desafios/Actualizar', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
                 body: JSON.stringify(body)
             });
 
-            if (res.ok) window.location.href = '/Desafios';
-            else mostrarAlerta('Error al actualizar.', 'danger');
+            if (res.ok) {
+                window.location.href = '/Desafios';
+            } else {
+                mostrarAlerta('Error al actualizar.', 'danger');
+            }
         }
 
-        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+        function mostrarAlerta(msg, tipo) {
+            const a = document.getElementById('alerta');
+            a.className = `alert alert-${tipo}`;
+            a.textContent = msg;
+            a.classList.remove('d-none');
+        }
+
         cargar();
     </script>
 }

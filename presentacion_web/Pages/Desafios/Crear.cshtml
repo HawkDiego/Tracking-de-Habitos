@@ -7,26 +7,54 @@
 <input type="hidden" id="jwtToken" value="@HttpContext.Session.GetString("JWToken")" />
 
 <div class="container py-4" style="max-width:600px">
-    <h2 class="fw-bold text-white mb-4"><i class="fas fa-bullseye text-danger me-2"></i>Nuevo Desafío</h2>
+    <h2 class="fw-bold text-white mb-4">
+        <i class="fas fa-bullseye text-danger me-2"></i>Nuevo Desafío
+    </h2>
     <div id="alerta" class="alert d-none" role="alert"></div>
     <div class="card bg-dark border-secondary text-white shadow-sm">
         <div class="card-body">
-            <div class="mb-3"><label class="form-label">Título / Nombre *</label><input type="text" id="titulo" class="form-control bg-secondary text-white border-0" /></div>
-            <div class="mb-3"><label class="form-label">Descripción</label><textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"></textarea></div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre *</label>
+                <input type="text" id="nombre" class="form-control bg-secondary text-white border-0"
+                       placeholder="Ej: 7 días caminando" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea id="descripcion" class="form-control bg-secondary text-white border-0" rows="3"
+                          placeholder="Describe el objetivo del desafío..."></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Grupo Administrador (ID) *</label>
+                <input type="number" id="grupoAdministrador" class="form-control bg-secondary text-white border-0"
+                       value="1" min="1" />
+                <div class="form-text text-secondary">ID del grupo que administra este desafío.</div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col-6">
-                    <label class="form-label">Fecha Inicio</label>
+                    <label class="form-label">Fecha Inicio *</label>
                     <input type="date" id="fechaInicio" class="form-control bg-secondary text-white border-0" />
                 </div>
                 <div class="col-6">
-                    <label class="form-label">Fecha Fin</label>
+                    <label class="form-label">Fecha Fin *</label>
                     <input type="date" id="fechaFin" class="form-control bg-secondary text-white border-0" />
                 </div>
             </div>
-            <div class="mb-4"><label class="form-label">XP de Recompensa</label><input type="number" id="xpRecompensa" class="form-control bg-secondary text-white border-0" value="100" min="0" /></div>
+
+            <div class="mb-4">
+                <label class="form-label">XP Bono</label>
+                <input type="number" id="xpBono" class="form-control bg-secondary text-white border-0"
+                       value="50" min="0" />
+                <div class="form-text text-secondary">XP que se otorga al completar el desafío.</div>
+            </div>
 
             <div class="d-flex gap-2">
-                <button class="btn btn-info" onclick="guardar()"><i class="fas fa-save me-2"></i>Guardar</button>
+                <button class="btn btn-info" onclick="guardar()">
+                    <i class="fas fa-save me-2"></i>Guardar
+                </button>
                 <a href="/Desafios" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </div>
@@ -38,32 +66,61 @@
         const API_URL = "https://localhost:7293";
         const token = document.getElementById('jwtToken').value;
 
-        // Autocompletar con la fecha de hoy
+        // Prellenar fecha inicio con hoy
         document.getElementById('fechaInicio').valueAsDate = new Date();
 
         async function guardar() {
+            const nombre = document.getElementById('nombre').value.trim();
+            if (!nombre) {
+                mostrarAlerta('El nombre es obligatorio.', 'danger');
+                return;
+            }
+
+            const grupoVal = parseInt(document.getElementById('grupoAdministrador').value);
+            if (!grupoVal || grupoVal < 1) {
+                mostrarAlerta('El grupo administrador es obligatorio.', 'danger');
+                return;
+            }
+
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+
+            if (!fechaInicio || !fechaFin) {
+                mostrarAlerta('Las fechas de inicio y fin son obligatorias.', 'danger');
+                return;
+            }
+
             const body = {
-                titulo: document.getElementById('titulo').value, // Algunos backend usan 'nombre', si falla cambia a nombre
-                nombre: document.getElementById('titulo').value,
-                descripcion: document.getElementById('descripcion').value,
-                fechaInicio: new Date(document.getElementById('fechaInicio').value).toISOString(),
-                fechaFin: new Date(document.getElementById('fechaFin').value).toISOString(),
-                xpRecompensa: parseInt(document.getElementById('xpRecompensa').value) || 0,
-                xpOtorgada: parseInt(document.getElementById('xpRecompensa').value) || 0, // Respaldo por si el campo se llama así
+                nombre: nombre,
+                descripcion: document.getElementById('descripcion').value || null,
+                grupoAdministrador: grupoVal,
+                fechaInicio: fechaInicio + "T00:00:00",
+                fechaFin: fechaFin + "T00:00:00",
+                xpBono: parseInt(document.getElementById('xpBono').value) || 0,
                 estado: 1
             };
 
-            if (!body.titulo) { mostrarAlerta('El título es obligatorio.', 'danger'); return; }
-
             const res = await fetch(API_URL + '/Desafios/Insertar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
                 body: JSON.stringify(body)
             });
 
-            if (res.ok || res.status === 201) window.location.href = '/Desafios';
-            else mostrarAlerta('Error al guardar.', 'danger');
+            if (res.ok || res.status === 201) {
+                window.location.href = '/Desafios';
+            } else {
+                mostrarAlerta('Error al guardar. Verifique que el Grupo exista.', 'danger');
+            }
         }
-        function mostrarAlerta(msg, tipo) { const a = document.getElementById('alerta'); a.className = `alert alert-${tipo}`; a.textContent = msg; a.classList.remove('d-none'); }
+
+        function mostrarAlerta(msg, tipo) {
+            const a = document.getElementById('alerta');
+            a.className = `alert alert-${tipo}`;
+            a.textContent = msg;
+            a.classList.remove('d-none');
+        }
     </script>
 }
